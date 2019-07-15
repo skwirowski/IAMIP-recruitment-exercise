@@ -1,0 +1,7 @@
+const FETCH_POSTS = 'FETCH_POSTS';
+const POSTS_RECEIVED = 'POSTS_RECEIVED';
+
+export default {
+  FETCH_POSTS,
+  POSTS_RECEIVED,
+};

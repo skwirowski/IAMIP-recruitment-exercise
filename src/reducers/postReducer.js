@@ -8,10 +8,22 @@ const INITIAL_STATE = {
 
 const reducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case types.FETCH_POSTS:
+    case types.POSTS_FETCH_REQUESTED:
       return {
         ...state,
         isLoading: true,
+      };
+    case types.POSTS_FETCH_SUCCEEDED:
+      return {
+        ...state,
+        isLoading: false,
+        posts: action.payload,
+      };
+    case types.POSTS_FETCH_FAILED:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
       };
     default:
       return state;

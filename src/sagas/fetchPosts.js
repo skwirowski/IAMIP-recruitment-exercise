@@ -1,14 +1,24 @@
-import { put, takeLatest, all } from 'redux-saga/effects';
+import { put, takeLatest } from 'redux-saga/effects';
 import types from '../static/reduxTypes';
+import getPosts from '../services/getPostsAPI';
 
 function* fetchPosts() {
-  const posts = yield fetch('https://jsonplaceholder.typicode.com/posts').then(
-    response => response.json(),
-  );
-
-  yield put({ type: types.POSTS_RECEIVED, payload: posts });
+  try {
+    const posts = yield getPosts();
+    yield put({
+      type: types.POSTS_FETCH_SUCCEEDED,
+      payload: posts,
+    });
+  } catch (error) {
+    yield put({
+      type: types.POSTS_FETCH_FAILED,
+      payload: error,
+    });
+  }
 }
 
-function* actionWatcher() {
-	yield takeLatest()
+function* fetchPostsActionWatcher() {
+  yield takeLatest(types.POSTS_FETCH_REQUESTED, fetchPosts);
 }
+
+export default fetchPostsActionWatcher;

@@ -1,27 +1,36 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit
-          {' '}
-          <code>src/App.js</code>
-          {' '}
-          and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import postActions from './actions/postActions';
+
+
+class App extends PureComponent {
+  componentDidMount() {
+    const { fetchPosts } = this.props;
+    fetchPosts();
+  }
+
+  render() {
+    const posts = this.props.state.postReducer.posts;
+    console.log(this.props.state.postReducer);
+    return (
+      <div className="App">
+        <ul>
+          {posts ? (posts.map(post => (
+            <li key={post.id}>{post.body}</li>
+          ))) : (
+            <li>Loading ...</li>
+          )}
+        </ul>
+      </div>
+    );
+  }
 }
 
-export default App;
+const mapStateToProps = state => ({ state });
+
+const mapDispatchToProps = dispatch => ({
+  fetchPosts: () => dispatch(postActions.fetchPosts()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

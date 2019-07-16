@@ -1,4 +1,4 @@
-const getPosts = () => fetch('https://jsonplaceholder.typicode.com/posts').then(
+const getPosts = (start, end) => fetch(`https://jsonplaceholder.typicode.com/posts?_start=${start}&_limit=${end}`).then(
   response => response.json(),
 );
 

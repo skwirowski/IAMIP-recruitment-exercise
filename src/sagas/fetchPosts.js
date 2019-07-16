@@ -2,9 +2,9 @@ import { put, takeLatest } from 'redux-saga/effects';
 import types from '../static/reduxTypes';
 import getPosts from '../services/getPostsAPI';
 
-function* fetchPosts() {
+function* fetchPosts(action) {
   try {
-    const posts = yield getPosts();
+    const posts = yield getPosts(action.start, action.end);
     yield put({
       type: types.POSTS_FETCH_SUCCEEDED,
       payload: posts,

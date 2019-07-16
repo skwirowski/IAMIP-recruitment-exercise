@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+.post-container {
+  width: 80%;
+  background-color: #e4e4e4;
+  padding: 15px;
+  margin: 15px auto;
+}
+.post-container__title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  color: #3c3c3c;
+}
+.post-container__body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+}

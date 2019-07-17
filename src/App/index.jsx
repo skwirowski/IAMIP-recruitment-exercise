@@ -1,17 +1,18 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import ReactPaginate from 'react-paginate';
 
-import postActions from './actions/postActions';
-import Post from './components/Post';
-import './globalStyles/styles.css';
+import postActions from '../actions/postActions';
+import Post from '../components/Post';
+
+import './styles/styles.css'
 
 
 class App extends PureComponent {
   state = {
     startPage: 0,
     resultsLimit: 5,
-    offset: 0,
   }
 
   componentDidMount() {
@@ -19,14 +20,15 @@ class App extends PureComponent {
     fetchPosts(this.state.startPage, this.state.resultsLimit);
   }
 
-  handleClick = () => {
+  handlePageClick = posts => {
+    let selected = posts.selected;
+    let startPage = Math.ceil(selected * 5);
     const { fetchPosts } = this.props;
-    this.setState({
-      startPage: this.state.startPage + 5,
-    }, () => {
+
+    this.setState({ startPage: startPage }, () => {
       fetchPosts(this.state.startPage, this.state.resultsLimit);
     });
-  }
+  };
 
   render() {
     const { posts } = this.props.state.postReducer;
@@ -41,10 +43,22 @@ class App extends PureComponent {
               body={post.body}
             />
           ))) : (
-            <div>Loading ...</div>
-          )}
+              <div>Loading ...</div>
+            )}
         </div>
-        <button type="button" onClick={() => this.handleClick()}>click</button>
+        <ReactPaginate
+          previousLabel={'previous'}
+          nextLabel={'next'}
+          breakLabel={'...'}
+          breakClassName={'break-me'}
+          pageCount={20}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={this.handlePageClick}
+          containerClassName={'pagination'}
+          subContainerClassName={'pages pagination'}
+          activeClassName={'active'}
+        />
       </div>
     );
   }

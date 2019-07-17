@@ -1,9 +1,9 @@
 import types from '../static/reduxTypes';
 
-const fetchPosts = (start, end) => ({
+const fetchPosts = (start, limit) => ({
   type: types.POSTS_FETCH_REQUESTED,
   start,
-  end,
+  limit,
 });
 
 const postsDataReceived = payload => ({

@@ -10,22 +10,21 @@ import './globalStyles/styles.css';
 class App extends PureComponent {
   state = {
     startPage: 0,
-    endPage: 5,
+    resultsLimit: 5,
     offset: 0,
   }
 
   componentDidMount() {
     const { fetchPosts } = this.props;
-    fetchPosts(this.state.startPage, this.state.endPage);
+    fetchPosts(this.state.startPage, this.state.resultsLimit);
   }
 
   handleClick = () => {
     const { fetchPosts } = this.props;
     this.setState({
       startPage: this.state.startPage + 5,
-      endPage: this.state.endPage + 5,
     }, () => {
-      fetchPosts(this.state.startPage, this.state.endPage);
+      fetchPosts(this.state.startPage, this.state.resultsLimit);
     });
   }
 
@@ -54,7 +53,7 @@ class App extends PureComponent {
 const mapStateToProps = state => ({ state });
 
 const mapDispatchToProps = dispatch => ({
-  fetchPosts: (start, end) => dispatch(postActions.fetchPosts(start, end)),
+  fetchPosts: (start, limit) => dispatch(postActions.fetchPosts(start, limit)),
 });
 
 App.propTypes = {

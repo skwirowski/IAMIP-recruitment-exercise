@@ -4,7 +4,7 @@ import getPosts from '../services/getPostsAPI';
 
 function* fetchPosts(action) {
   try {
-    const posts = yield getPosts(action.start, action.end);
+    const posts = yield getPosts(action.start, action.limit);
     yield put({
       type: types.POSTS_FETCH_SUCCEEDED,
       payload: posts,

@@ -1,16 +1,17 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import ReactPaginate from 'react-paginate';
 import PropTypes from 'prop-types';
 
 import postActions from './actions/postActions';
 import Post from './components/Post';
+import './globalStyles/styles.css';
 
 
 class App extends PureComponent {
   state = {
     startPage: 0,
     endPage: 5,
+    offset: 0,
   }
 
   componentDidMount() {
@@ -18,18 +19,18 @@ class App extends PureComponent {
     fetchPosts(this.state.startPage, this.state.endPage);
   }
 
-  handlePageClick = (data) => {
-    let selected = data.selected;
-    let offset = Math.ceil(selected * this.props.perPage);
-
-    this.setState({ offset }, () => {
-      this.loadCommentsFromServer();
+  handleClick = () => {
+    const { fetchPosts } = this.props;
+    this.setState({
+      startPage: this.state.startPage + 5,
+      endPage: this.state.endPage + 5,
+    }, () => {
+      fetchPosts(this.state.startPage, this.state.endPage);
     });
-  };
-
+  }
 
   render() {
-    const posts = this.props.state.postReducer.posts;
+    const { posts } = this.props.state.postReducer;
     console.log(this.props.state.postReducer);
     return (
       <div className="App">
@@ -41,22 +42,10 @@ class App extends PureComponent {
               body={post.body}
             />
           ))) : (
-              <div>Loading ...</div>
-            )}
+            <div>Loading ...</div>
+          )}
         </div>
-        <ReactPaginate
-          previousLabel="previous"
-          nextLabel="next"
-          breakLabel="..."
-          breakClassName="break-me"
-          pageCount={this.props.state.postReducer.posts.lenght}
-          marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
-          onPageChange={this.handlePageClick}
-          containerClassName="pagination"
-          subContainerClassName="pages pagination"
-          activeClassName="active"
-        />
+        <button type="button" onClick={() => this.handleClick()}>click</button>
       </div>
     );
   }

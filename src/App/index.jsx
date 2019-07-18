@@ -12,7 +12,7 @@ import './styles/styles.css'
 class App extends PureComponent {
   state = {
     startPage: 0,
-    resultsLimit: 5,
+    resultsLimit: 10,
   }
 
   componentDidMount() {
@@ -22,7 +22,7 @@ class App extends PureComponent {
 
   handlePageClick = posts => {
     let selected = posts.selected;
-    let startPage = Math.ceil(selected * 5);
+    let startPage = Math.ceil(selected * 10);
     const { fetchPosts } = this.props;
 
     this.setState({ startPage: startPage }, () => {
@@ -47,11 +47,11 @@ class App extends PureComponent {
             )}
         </div>
         <ReactPaginate
-          previousLabel={'previous'}
-          nextLabel={'next'}
+          previousLabel={'<<'}
+          nextLabel={'>>'}
           breakLabel={'...'}
           breakClassName={'break-me'}
-          pageCount={20}
+          pageCount={10}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={this.handlePageClick}

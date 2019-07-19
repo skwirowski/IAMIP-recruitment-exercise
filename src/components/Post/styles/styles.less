@@ -3,7 +3,7 @@
 .post-container {
   width: 80%;
   background-color: #FFFFFF;
-  border: 1px solid #dddfe2;
+  border: 1px solid @accentColor01;
   border-radius: 4px;
   padding: 15px;
   margin: 15px auto;
@@ -18,5 +18,15 @@
   &__body {
     font-family: @primaryFontFamily;
     font-size: @defaultFontSize;
+  }
+
+  &__view-comments {
+    font-family: @primaryFontFamily;
+    font-size: @smallFontSize;
+    color: @secondaryColor;
+    
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }

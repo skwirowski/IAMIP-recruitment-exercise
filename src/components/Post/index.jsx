@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Comment from '../Comment';
 import '../../globalStyles/resets.css';
 import './styles/styles.css';
 
@@ -19,6 +20,7 @@ const Post = ({ title, body }) => (
     >
       View comments
     </button>
+    <Comment />
   </div>
 );
 

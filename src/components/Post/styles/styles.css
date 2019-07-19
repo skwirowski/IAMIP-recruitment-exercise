@@ -24,7 +24,7 @@
   font-size: 14px;
   color: #3c3c3c;
   cursor: pointer;
-  margin: auto;
+  margin: 30px auto;
 }
 .post-container__view-comments:hover {
   text-decoration: underline;

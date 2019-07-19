@@ -1,25 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap');
-@import url('https://fonts.googleapis.com/css?family=Roboto:400,900&display=swap');
-
-// FONTS
-@primaryFontFamily: 'Roboto', sans-serif;
-@primaryFontWeightRegular: 400;
-@primaryFontWeightBlack: 900;
-
-@secondaryFontFamily: 'Montserrat', sans-serif;
-@secondaryFontWeightRegular: 400;
-@secondaryFontWeightBold: 700;
-
-@defaultFontSize: 16px;
-@smallFontSize: 14px;
-@header1FontSize: 32px;
-@header2FontSize: 24px;
-
-// COLORS
-@primaryColor: #e4e4e4;
-@secondaryColor: #3c3c3c;
-@accentColor01: #dddfe2;
-@accentColor02: #dadde1;
+@import './settings';
 
 body {
   background-color: #e9ebee;
@@ -32,14 +11,5 @@ body {
     height: 1px;
     background-color: @accentColor02;
     margin: 30px 0;
-  }
-
-  &__button-reset-styles {
-    margin: 0;
-    padding: 0;
-    border: none;
-    &:focus {
-      outline: none;
-    }
   }
 }

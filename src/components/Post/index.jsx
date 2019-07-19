@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import '../../globalStyles/resets.css';
 import './styles/styles.css';
 
 const Post = ({ title, body }) => (
@@ -10,7 +11,7 @@ const Post = ({ title, body }) => (
     <span className="global__separator-line" />
     <button
       className={[
-        'global__button-reset-styles',
+        'reset-button-styles',
         'post-container__view-comments',
       ].join(' ')}
       type="button"

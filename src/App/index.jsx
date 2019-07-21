@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ReactPaginate from 'react-paginate';
 
-import postActions from '../actions/postActions';
+import fetchPosts from '../actions/postActions';
 import Post from '../components/Post';
 
 import './styles/styles.css'
@@ -11,28 +11,30 @@ import './styles/styles.css'
 
 class App extends PureComponent {
   state = {
-    startPage: 0,
+    resultsOffset: 0,
     resultsLimit: 10,
   }
 
   componentDidMount() {
     const { fetchPosts } = this.props;
-    fetchPosts(this.state.startPage, this.state.resultsLimit);
+    const { resultsOffset, resultsLimit } = this.state;
+    fetchPosts(resultsOffset, resultsLimit);
   }
 
   handlePageClick = posts => {
     let selected = posts.selected;
-    let startPage = Math.ceil(selected * 10);
+    let offset = Math.ceil(selected * 10);
     const { fetchPosts } = this.props;
 
-    this.setState({ startPage: startPage }, () => {
-      fetchPosts(this.state.startPage, this.state.resultsLimit);
+    this.setState({ resultsOffset: offset }, () => {
+      const { resultsOffset, resultsLimit } = this.state;
+      fetchPosts(resultsOffset, resultsLimit);
     });
   };
 
   render() {
-    const { posts } = this.props.state.postReducer;
-    console.log(this.props.state.postReducer);
+    const { posts } = this.props.state;
+    console.log("Post Reducer LOG: ", this.props.state);
     return (
       <div className="App">
         <div>
@@ -41,6 +43,7 @@ class App extends PureComponent {
               key={post.id}
               title={post.title}
               body={post.body}
+              id={post.id}
             />
           ))) : (
               <div>Loading ...</div>
@@ -64,10 +67,10 @@ class App extends PureComponent {
   }
 }
 
-const mapStateToProps = state => ({ state });
+const mapStateToProps = state => ({ state: state.postReducer });
 
 const mapDispatchToProps = dispatch => ({
-  fetchPosts: (start, limit) => dispatch(postActions.fetchPosts(start, limit)),
+  fetchPosts: (start, limit) => dispatch(fetchPosts(start, limit)),
 });
 
 App.propTypes = {

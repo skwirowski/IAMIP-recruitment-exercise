@@ -6,12 +6,4 @@ const fetchPosts = (start, limit) => ({
   limit,
 });
 
-const postsDataReceived = payload => ({
-  type: types.POSTS_FETCH_SUCCEEDED,
-  payload,
-});
-
-export default {
-  fetchPosts,
-  postsDataReceived,
-};
+export default fetchPosts;

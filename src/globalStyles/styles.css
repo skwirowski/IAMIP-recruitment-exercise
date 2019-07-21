@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,900&display=swap');
 body {
   background-color: #e9ebee;
+  margin: 0;
 }
 .global__separator-line {
   display: block;

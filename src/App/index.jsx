@@ -1,18 +1,31 @@
-import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import ReactPaginate from 'react-paginate';
+import React, { PureComponent, Fragment } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import ReactPaginate from "react-paginate";
 
-import fetchPosts from '../actions/postActions';
-import Post from '../components/Post';
+import fetchPosts from "../actions/postActions";
+import Loader from "../components/Loader";
+import Post from "../components/Post";
 
-import './styles/styles.css'
-
+import "./styles/styles.css";
 
 class App extends PureComponent {
-  state = {
-    resultsOffset: 0,
-    resultsLimit: 10,
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      resultsOffset: 0,
+      resultsLimit: 10
+    };
+
+    // if (window.performance) {
+    //   if (performance.navigation.type == 1) {
+    //     alert("This page is reloaded");
+    //   } else {
+    //     alert("This page is not reloaded");
+    //   }
+    // }
+
   }
 
   componentDidMount() {
@@ -33,34 +46,40 @@ class App extends PureComponent {
   };
 
   render() {
-    const { posts } = this.props.state;
+    const { posts, isLoading } = this.props.state;
     console.log("Post Reducer LOG: ", this.props.state);
     return (
       <div className="App">
-        <div>
-          {posts ? (posts.map(post => (
-            <Post
-              key={post.id}
-              title={post.title}
-              body={post.body}
-              id={post.id}
-            />
-          ))) : (
-              <div>Loading ...</div>
-            )}
-        </div>
+        {
+          isLoading ? (
+            <Loader />
+          ) : (
+            <div>
+              {
+                posts.map(post => (
+                  <Post
+                    key={post.id}
+                    title={post.title}
+                    body={post.body}
+                    id={post.id}
+                  />
+                ))
+              }
+            </div>
+          )
+        }
         <ReactPaginate
-          previousLabel={'<<'}
-          nextLabel={'>>'}
-          breakLabel={'...'}
-          breakClassName={'break-me'}
+          previousLabel={"<<"}
+          nextLabel={">>"}
+          breakLabel={"..."}
+          breakClassName={"break-me"}
           pageCount={10}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={this.handlePageClick}
-          containerClassName={'pagination'}
-          subContainerClassName={'pages pagination'}
-          activeClassName={'active'}
+          containerClassName={"pagination"}
+          subContainerClassName={"pages pagination"}
+          activeClassName={"active"}
         />
       </div>
     );
@@ -70,7 +89,7 @@ class App extends PureComponent {
 const mapStateToProps = state => ({ state: state.postReducer });
 
 const mapDispatchToProps = dispatch => ({
-  fetchPosts: (start, limit) => dispatch(fetchPosts(start, limit)),
+  fetchPosts: (start, limit) => dispatch(fetchPosts(start, limit))
 });
 
 App.propTypes = {
@@ -81,22 +100,25 @@ App.propTypes = {
     error: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,
-      PropTypes.oneOf([null]),
-    ]),
+      PropTypes.oneOf([null])
+    ])
   }),
   posts: PropTypes.arrayOf(
     PropTypes.shape({
       body: PropTypes.string,
       id: PropTypes.number,
       title: PropTypes.string,
-      userId: PropTypes.number,
-    }),
-  ),
+      userId: PropTypes.number
+    })
+  )
 };
 
 App.defaultProps = {
   state: {},
-  posts: [],
+  posts: []
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);

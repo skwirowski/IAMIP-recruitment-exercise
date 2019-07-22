@@ -6,4 +6,13 @@ const fetchPosts = (start, limit) => ({
   limit,
 });
 
-export default fetchPosts;
+const addCommentsToPost = (id, payload) => ({
+  type: types.ADD_COMMENTS_TO_POST,
+  id,
+  payload,
+});
+
+export default {
+  fetchPosts,
+  addCommentsToPost,
+};

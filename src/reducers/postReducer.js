@@ -25,6 +25,12 @@ const reducer = (state = INITIAL_STATE, action) => {
         isLoading: false,
         error: action.payload,
       };
+    case types.ADD_COMMENTS_TO_POST:
+      return {
+        ...state,
+        posts: state.posts.map(post => (
+          (action.id === post.id) ? { ...post, comments: action.payload } : post)),
+      };
     default:
       return state;
   }

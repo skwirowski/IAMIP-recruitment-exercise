@@ -2,12 +2,13 @@ import React from 'react';
 
 import './styles/styles.css';
 
-const Comment = () => {
-  return (
-    <div className="comment-container">
-      <p className="comment-container__content">Comment. Proident nisi sunt do enim veniam.</p>
-    </div>
-  );
-};
+const Comment = ({ title, body }) => (
+  <div className="comment-container">
+    <p className="comment-container__content">
+      <span>{ title }</span>
+      { body }
+    </p>
+  </div>
+);
 
 export default Comment;

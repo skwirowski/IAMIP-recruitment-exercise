@@ -5,4 +5,6 @@ const fetchComments = id => ({
   id,
 });
 
-export default fetchComments;
+export default {
+  fetchComments,
+};

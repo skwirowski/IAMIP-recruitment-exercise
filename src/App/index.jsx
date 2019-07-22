@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import ReactPaginate from "react-paginate";
 
-import fetchPosts from "../actions/postActions";
+import postActions from "../actions/postActions";
+import getComments from "../services/getCommentsAPI";
 import Loader from "../components/Loader";
 import Post from "../components/Post";
 
@@ -45,6 +46,12 @@ class App extends PureComponent {
     });
   };
 
+  onViewCommentsClick = (id) => {
+    const { addCommentsToPost } = this.props;
+    getComments(id)
+      .then(data => addCommentsToPost(id, data))
+  }
+
   render() {
     const { posts, isLoading } = this.props.state;
     console.log("Post Reducer LOG: ", this.props.state);
@@ -61,7 +68,8 @@ class App extends PureComponent {
                     key={post.id}
                     title={post.title}
                     body={post.body}
-                    id={post.id}
+                    onViewCommentsClick={() => this.onViewCommentsClick(post.id)}
+                    comments={post.comments}
                   />
                 ))
               }
@@ -89,7 +97,8 @@ class App extends PureComponent {
 const mapStateToProps = state => ({ state: state.postReducer });
 
 const mapDispatchToProps = dispatch => ({
-  fetchPosts: (start, limit) => dispatch(fetchPosts(start, limit))
+  fetchPosts: (start, limit) => dispatch(postActions.fetchPosts(start, limit)),
+  addCommentsToPost: (id, payload) => dispatch(postActions.addCommentsToPost(id, payload)),
 });
 
 App.propTypes = {

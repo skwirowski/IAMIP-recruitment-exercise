@@ -2,7 +2,6 @@ import types from '../static/reduxTypes';
 
 const INITIAL_STATE = {
   isLoading: false,
-  comments: [],
   error: null,
 };
 

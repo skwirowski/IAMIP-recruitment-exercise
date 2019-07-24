@@ -27,8 +27,28 @@
     color: @secondaryColor;
     cursor: pointer;
     margin: 30px auto;
+
     &:hover {
       text-decoration: underline;
     }
+
+    &:disabled {
+      text-decoration: none;
+      cursor: default;
+      color: fade(@secondaryColor, 50%);
+    }
+  }
+
+  &__comments-loader {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__comment-input {
+    
+  }
+
+  &__comment-button {
+
   }
 }

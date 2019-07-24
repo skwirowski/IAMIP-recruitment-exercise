@@ -31,6 +31,12 @@ const reducer = (state = INITIAL_STATE, action) => {
         posts: state.posts.map(post => (
           (action.id === post.id) ? { ...post, comments: action.payload } : post)),
       };
+    case types.SET_COMMENTS_FETCH_LOADER:
+      return {
+        ...state,
+        posts: state.posts.map(post => (
+          (action.id === post.id) ? { ...post, isLoading: action.payload } : post)),
+      };
     default:
       return state;
   }

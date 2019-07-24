@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap');
-@import url('https://fonts.googleapis.com/css?family=Roboto:400,900&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700,900&display=swap');
 .post-container {
   width: 80%;
   background-color: #FFFFFF;
@@ -28,4 +28,13 @@
 }
 .post-container__view-comments:hover {
   text-decoration: underline;
+}
+.post-container__view-comments:disabled {
+  text-decoration: none;
+  cursor: default;
+  color: rgba(60, 60, 60, 0.5);
+}
+.post-container__comments-loader {
+  display: flex;
+  justify-content: center;
 }

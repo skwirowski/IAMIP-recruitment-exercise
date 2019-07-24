@@ -1,10 +1,11 @@
-import React, { PureComponent, Fragment } from "react";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import ReactPaginate from "react-paginate";
 
 import postActions from "../actions/postActions";
-import getComments from "../services/getCommentsAPI";
+import commentActions from "../actions/commentActions";
+
 import Loader from "../components/Loader";
 import Post from "../components/Post";
 
@@ -16,7 +17,7 @@ class App extends PureComponent {
 
     this.state = {
       resultsOffset: 0,
-      resultsLimit: 10
+      resultsLimit: 10,
     };
 
     // if (window.performance) {
@@ -47,14 +48,14 @@ class App extends PureComponent {
   };
 
   onViewCommentsClick = (id) => {
-    const { addCommentsToPost } = this.props;
-    getComments(id)
-      .then(data => addCommentsToPost(id, data))
+    const { fetchComments } = this.props;
+    fetchComments(id)
   }
 
   render() {
-    const { posts, isLoading } = this.props.state;
-    console.log("Post Reducer LOG: ", this.props.state);
+    const { posts, isLoading } = this.props.postReducer;
+    console.log("Post Reducer LOG: ", this.props.postReducer);
+    console.log("Comment Reducer LOG: ", this.props.commentReducer);
     return (
       <div className="App">
         {
@@ -66,6 +67,7 @@ class App extends PureComponent {
                 posts.map(post => (
                   <Post
                     key={post.id}
+                    loading={post.isLoading}
                     title={post.title}
                     body={post.body}
                     onViewCommentsClick={() => this.onViewCommentsClick(post.id)}
@@ -94,11 +96,11 @@ class App extends PureComponent {
   }
 }
 
-const mapStateToProps = state => ({ state: state.postReducer });
+const mapStateToProps = state => ({ ...state });
 
 const mapDispatchToProps = dispatch => ({
   fetchPosts: (start, limit) => dispatch(postActions.fetchPosts(start, limit)),
-  addCommentsToPost: (id, payload) => dispatch(postActions.addCommentsToPost(id, payload)),
+  fetchComments: id => dispatch(commentActions.fetchComments(id)),
 });
 
 App.propTypes = {

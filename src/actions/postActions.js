@@ -12,7 +12,14 @@ const addCommentsToPost = (id, payload) => ({
   payload,
 });
 
+const setCommentsFetchLoader = (id, payload) => ({
+  type: types.SET_COMMENTS_FETCH_LOADER,
+  id,
+  payload,
+});
+
 export default {
   fetchPosts,
   addCommentsToPost,
+  setCommentsFetchLoader,
 };

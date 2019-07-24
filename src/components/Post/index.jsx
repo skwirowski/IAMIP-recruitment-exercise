@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import Comment from '../Comment';
+import LoaderSmall from '../LoaderSmall';
 import '../../globalStyles/resets.css';
 import './styles/styles.css';
 
 const Post = ({
-  onViewCommentsClick, comments, name, title, body,
+  onViewCommentsClick, comments, name, title, body, loading,
 }) => {
   const handleClick = id => onViewCommentsClick(id);
 
@@ -22,26 +23,50 @@ const Post = ({
         ].join(' ')}
         type="button"
         onClick={handleClick}
+        disabled={comments.length !== 0 || loading}
       >
         View comments
       </button>
       {
-          !comments ? (
-            <div>Loading...</div>
-          ) : (
-            <div>
-              {
-                comments.map(comment => (
-                  <Comment
-                    key={comment.id}
-                    title={comment.title}
-                    body={comment.body}
+        loading ? (
+          <div className="post-container__comments-loader">
+            <LoaderSmall />
+          </div>
+        ) : (
+          <Fragment>
+            {
+              comments.map(comment => (
+                <Comment
+                  key={comment.id}
+                  email={comment.email}
+                  body={comment.body}
+                />
+              ))
+            }
+            {
+              comments.length !== 0 && (
+                <form>
+                  <input
+                    className="post-container__comment-input"
+                    type="text"
+                    placeholder="Type your comment..."
                   />
-                ))
-              }
-            </div>
-          )
-        }
+                  <button
+                    className={[
+                      'reset-button-styles',
+                      'post-container__comment-button',
+                    ].join(' ')}
+                    type="submit"
+                  >
+                    Send
+                  </button>
+
+                </form>
+              )
+            }
+          </Fragment>
+        )
+      }
     </div>
   );
 };
@@ -60,6 +85,7 @@ Post.propTypes = {
   name: PropTypes.string,
   title: PropTypes.string,
   body: PropTypes.string,
+  loading: PropTypes.bool,
 };
 
 Post.defaultProps = {
@@ -67,6 +93,7 @@ Post.defaultProps = {
   name: '',
   title: '',
   body: '',
+  loading: false,
 };
 
 export default Post;

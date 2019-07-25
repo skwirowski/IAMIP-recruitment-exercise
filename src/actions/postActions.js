@@ -18,8 +18,15 @@ const setCommentsFetchLoader = (id, payload) => ({
   payload,
 });
 
+const toggleFavouritePost = (id, payload) => ({
+  type: types.TOGGLE_FAVOURITE_POST,
+  id,
+  payload,
+});
+
 export default {
   fetchPosts,
   addCommentsToPost,
   setCommentsFetchLoader,
+  toggleFavouritePost,
 };

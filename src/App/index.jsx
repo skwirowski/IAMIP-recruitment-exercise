@@ -18,6 +18,7 @@ class App extends PureComponent {
     this.state = {
       resultsOffset: 0,
       resultsLimit: 10,
+      favouritePosts: [],
     };
 
     // if (window.performance) {
@@ -36,7 +37,7 @@ class App extends PureComponent {
     fetchPosts(resultsOffset, resultsLimit);
   }
 
-  handlePageClick = posts => {
+  handlePageClick = (posts) => {
     let selected = posts.selected;
     let offset = Math.ceil(selected * 10);
     const { fetchPosts } = this.props;
@@ -50,6 +51,11 @@ class App extends PureComponent {
   onViewCommentsClick = (id) => {
     const { fetchComments } = this.props;
     fetchComments(id)
+  }
+
+  onToggleFavouritePostClick = (id, payload) => {
+    const { toggleFavouritePost } = this.props;
+    toggleFavouritePost(id, payload);
   }
 
   render() {
@@ -74,6 +80,7 @@ class App extends PureComponent {
                     comments={post.comments}
                     isFavourite={post.isFavourite}
                     post={post}
+                    onToggleFavouritePostClick={() => this.onToggleFavouritePostClick(post.id, !post.isFavourite)}
                   />
                 ))
               }
@@ -103,6 +110,7 @@ const mapStateToProps = state => ({ ...state });
 const mapDispatchToProps = dispatch => ({
   fetchPosts: (start, limit) => dispatch(postActions.fetchPosts(start, limit)),
   fetchComments: id => dispatch(commentActions.fetchComments(id)),
+  toggleFavouritePost: (id, payload) => dispatch(postActions.toggleFavouritePost(id, payload)),
 });
 
 App.propTypes = {

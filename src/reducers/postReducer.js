@@ -37,9 +37,11 @@ const reducer = (state = INITIAL_STATE, action) => {
         posts: state.posts.map(post => (
           (action.id === post.id) ? { ...post, isLoading: action.payload } : post)),
       };
-    case types.SET_FAVOURITE_POSTS:
+    case types.TOGGLE_FAVOURITE_POST:
       return {
         ...state,
+        posts: state.posts.map(post => (
+          (action.id === post.id) ? { ...post, isFavourite: action.payload } : post)),
       };
     default:
       return state;

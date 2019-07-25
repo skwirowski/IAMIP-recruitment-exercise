@@ -14,8 +14,10 @@ const Post = ({
   body,
   loading,
   isFavourite,
+  onToggleFavouritePostClick,
 }) => {
-  const handleClick = id => onViewCommentsClick(id);
+  const handleViewCommentsClick = id => onViewCommentsClick(id);
+  const handleToggleFavouritePostClick = id => onToggleFavouritePostClick(id);
 
   return (
     <div className="post-container">
@@ -28,7 +30,10 @@ const Post = ({
         ].join(' ')}
       />
 
-      <FavouriteButton favourite={isFavourite} />
+      <FavouriteButton
+        favourite={isFavourite}
+        onClick={handleToggleFavouritePostClick}
+      />
 
       <span
         className={[
@@ -42,11 +47,12 @@ const Post = ({
           'post-container__view-comments',
         ].join(' ')}
         type="button"
-        onClick={handleClick}
+        onClick={handleViewCommentsClick}
         disabled={comments.length !== 0 || loading}
       >
         View comments
       </button>
+
       {loading ? (
         <div className="post-container__comments-loader">
           <LoaderSmall />
@@ -80,6 +86,7 @@ const Post = ({
           )}
         </Fragment>
       )}
+
     </div>
   );
 };
@@ -99,6 +106,7 @@ Post.propTypes = {
   body: PropTypes.string,
   loading: PropTypes.bool,
   isFavourite: PropTypes.bool,
+  onToggleFavouritePostClick: PropTypes.func.isRequired,
 };
 
 Post.defaultProps = {

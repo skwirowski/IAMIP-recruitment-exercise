@@ -5,6 +5,17 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        height: 20px;
+        padding: 5px 10px;
+        border-radius: 15px;
+        transition: background-color 500ms ease;
+
+        &:hover {
+            background-color: @accentColor01;
+        }
+        &:active {
+            background-color: darken(@accentColor01, 5%);
+        }
     }
     &__heart {
         position: relative;

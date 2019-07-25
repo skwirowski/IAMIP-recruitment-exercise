@@ -16,7 +16,7 @@ const FavouriteButton = ({ favourite }) => {
       onClick={() => handleClick()}
     >
       <div className="favourite-button__wrapper">
-        { favourite ? (
+        { !favourite ? (
           <Fragment>
             <div className="favourite-button__heart" />
             <span

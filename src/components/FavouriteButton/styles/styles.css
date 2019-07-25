@@ -4,6 +4,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 20px;
+  padding: 5px 10px;
+  border-radius: 15px;
+  transition: background-color 500ms ease;
+}
+.favourite-button__wrapper:hover {
+  background-color: #dddfe2;
+}
+.favourite-button__wrapper:active {
+  background-color: #cfd2d6;
 }
 .favourite-button__heart {
   position: relative;

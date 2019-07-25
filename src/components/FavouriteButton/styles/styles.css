@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700,900&display=swap');
+.favourite-button__wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.favourite-button__heart {
+  position: relative;
+  width: 20px;
+  height: 18px;
+}
+.favourite-button__heart::before,
+.favourite-button__heart::after {
+  position: absolute;
+  content: "";
+  left: 10px;
+  top: 2px;
+  width: 10px;
+  height: 16px;
+  background: #fc2e5a;
+  -moz-border-radius: 16px 16px 0 0;
+  border-radius: 16px 16px 0 0;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  -webkit-transform-origin: 0 100%;
+  -moz-transform-origin: 0 100%;
+  -ms-transform-origin: 0 100%;
+  -o-transform-origin: 0 100%;
+  transform-origin: 0 100%;
+}
+.favourite-button__heart::after {
+  left: 0;
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+  -webkit-transform-origin: 100% 100%;
+  -moz-transform-origin: 100% 100%;
+  -ms-transform-origin: 100% 100%;
+  -o-transform-origin: 100% 100%;
+  transform-origin: 100% 100%;
+}
+.favourite-button__heart--add::before,
+.favourite-button__heart--add::after {
+  background: #8d949e;
+}
+.favourite-button__content {
+  color: #3c3c3c;
+  margin-left: 7.5px;
+}
+.favourite-button__content--remove {
+  color: rgba(60, 60, 60, 0.7);
+}

@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap');
-@import url('https://fonts.googleapis.com/css?family=Roboto:400,900&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700,900&display=swap');
 body {
   background-color: #e9ebee;
   margin: 0;
@@ -10,4 +10,10 @@ body {
   height: 1px;
   background-color: #dadde1;
   margin: 30px 0;
+}
+.global__separator-line--small-margin-bottom {
+  margin-bottom: 5px;
+}
+.global__separator-line--small-margin-top {
+  margin-top: 5px;
 }

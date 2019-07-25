@@ -72,6 +72,8 @@ class App extends PureComponent {
                     body={post.body}
                     onViewCommentsClick={() => this.onViewCommentsClick(post.id)}
                     comments={post.comments}
+                    isFavourite={post.isFavourite}
+                    post={post}
                   />
                 ))
               }

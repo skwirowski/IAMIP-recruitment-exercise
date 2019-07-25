@@ -1,0 +1,62 @@
+@import "../../../globalStyles/settings.less";
+
+.favourite-button {
+    &__wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    &__heart {
+        position: relative;
+        width: 20px;
+        height: 18px;
+            &::before,
+            &::after {
+            position: absolute;
+            content: "";
+            left: 10px;
+            top: 2px;
+            width: 10px;
+            height: 16px;
+            background: @accentColor06;
+            -moz-border-radius: 16px 16px 0 0;
+            border-radius: 16px 16px 0 0;
+            -webkit-transform: rotate(-45deg);
+            -moz-transform: rotate(-45deg);
+            -ms-transform: rotate(-45deg);
+            -o-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+            -webkit-transform-origin: 0 100%;
+            -moz-transform-origin: 0 100%;
+            -ms-transform-origin: 0 100%;
+            -o-transform-origin: 0 100%;
+            transform-origin: 0 100%;
+        }
+        &::after {
+            left: 0;
+            -webkit-transform: rotate(45deg);
+            -moz-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            -o-transform: rotate(45deg);
+            transform: rotate(45deg);
+            -webkit-transform-origin: 100% 100%;
+            -moz-transform-origin: 100% 100%;
+            -ms-transform-origin: 100% 100%;
+            -o-transform-origin: 100% 100%;
+            transform-origin: 100% 100%;
+        }
+        &--add {
+            &::before,
+            &::after {
+                background: @accentColor07;
+            }
+        }
+    }
+    &__content {
+        color: @secondaryColor;
+        margin-left: 15px / 2;
+        &--remove {
+            color: fade(@secondaryColor, 70%);
+        }
+    }
+}

@@ -5,6 +5,7 @@ import ReactPaginate from "react-paginate";
 
 import postActions from "../actions/postActions";
 import commentActions from "../actions/commentActions";
+import { addNumberToArray } from "../utils/helperFunctions";
 
 import Loader from "../components/Loader";
 import Post from "../components/Post";
@@ -18,7 +19,7 @@ class App extends PureComponent {
     this.state = {
       resultsOffset: 0,
       resultsLimit: 10,
-      favouritePosts: [],
+      favouritePostsIds: [],
     };
 
     // if (window.performance) {
@@ -56,6 +57,15 @@ class App extends PureComponent {
   onToggleFavouritePostClick = (id, payload) => {
     const { toggleFavouritePost } = this.props;
     toggleFavouritePost(id, payload);
+
+    const favouritePostsIdsArray = [];
+    addNumberToArray(id, favouritePostsIdsArray);
+    this.setState({
+      favouritePostsIds: [
+        ...this.state.favouritePostsIds,
+        ...favouritePostsIdsArray
+      ],
+    });
   }
 
   render() {

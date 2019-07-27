@@ -24,9 +24,15 @@ const toggleFavouritePost = (id, payload) => ({
   payload,
 });
 
+const setFavouritePosts = ids => ({
+  type: types.SET_FAVOURITE_POSTS,
+  ids,
+});
+
 export default {
   fetchPosts,
   addCommentsToPost,
   setCommentsFetchLoader,
   toggleFavouritePost,
+  setFavouritePosts,
 };

@@ -2,6 +2,7 @@ import types from '../static/reduxTypes';
 
 const INITIAL_STATE = {
   isLoading: false,
+  canSetFavouritePosts: false,
   posts: [],
   error: null,
 };
@@ -17,6 +18,7 @@ const reducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         isLoading: false,
+        canSetFavouritePosts: true,
         posts: action.payload,
       };
     case types.POSTS_FETCH_FAILED:
@@ -41,7 +43,16 @@ const reducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         posts: state.posts.map(post => (
-          (action.id === post.id) ? { ...post, isFavourite: action.payload } : post)),
+          (action.id === post.id) ? { ...post, isFavourite: action.payload } : post
+        )),
+      };
+    case types.SET_FAVOURITE_POSTS:
+      return {
+        ...state,
+        canSetFavouritePosts: false,
+        posts: state.posts.map(post => (
+          (action.ids.indexOf(post.id) !== -1) ? { ...post, isFavourite: true } : post
+        )),
       };
     default:
       return state;

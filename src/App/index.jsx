@@ -5,7 +5,7 @@ import ReactPaginate from "react-paginate";
 
 import postActions from "../actions/postActions";
 import commentActions from "../actions/commentActions";
-import { addNumberToArray } from "../utils/helperFunctions";
+import { setNumberToArray } from "../utils/helperFunctions";
 
 import Loader from "../components/Loader";
 import Post from "../components/Post";
@@ -38,6 +38,16 @@ class App extends PureComponent {
     fetchPosts(resultsOffset, resultsLimit);
   }
 
+  componentDidUpdate() {
+    const { setFavouritePosts } = this.props;
+    const { canSetFavouritePosts } = this.props.postReducer;
+    const { favouritePostsIds } = this.state;
+
+    if (canSetFavouritePosts) {
+      setFavouritePosts(favouritePostsIds);
+    }
+  }
+
   handlePageClick = (posts) => {
     let selected = posts.selected;
     let offset = Math.ceil(selected * 10);
@@ -56,22 +66,19 @@ class App extends PureComponent {
 
   onToggleFavouritePostClick = (id, payload) => {
     const { toggleFavouritePost } = this.props;
+    const { favouritePostsIds } = this.state;
     toggleFavouritePost(id, payload);
 
-    const favouritePostsIdsArray = [];
-    addNumberToArray(id, favouritePostsIdsArray);
+    setNumberToArray(id, favouritePostsIds);
     this.setState({
-      favouritePostsIds: [
-        ...this.state.favouritePostsIds,
-        ...favouritePostsIdsArray
-      ],
+      favouritePostsIds,
     });
   }
 
   render() {
     const { posts, isLoading } = this.props.postReducer;
-    console.log("Post Reducer LOG: ", this.props.postReducer);
-    console.log("Comment Reducer LOG: ", this.props.commentReducer);
+    // console.log("Post Reducer LOG: ", this.props.postReducer);
+    // console.log("Comment Reducer LOG: ", this.props.commentReducer);
     return (
       <div className="App">
         {
@@ -121,6 +128,7 @@ const mapDispatchToProps = dispatch => ({
   fetchPosts: (start, limit) => dispatch(postActions.fetchPosts(start, limit)),
   fetchComments: id => dispatch(commentActions.fetchComments(id)),
   toggleFavouritePost: (id, payload) => dispatch(postActions.toggleFavouritePost(id, payload)),
+  setFavouritePosts: ids => dispatch(postActions.setFavouritePosts(ids)),
 });
 
 App.propTypes = {

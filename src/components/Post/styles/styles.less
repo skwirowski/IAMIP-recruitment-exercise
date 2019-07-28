@@ -44,11 +44,54 @@
     justify-content: center;
   }
 
+  &__comment-input-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 16px 30px 0;
+  }
+
   &__comment-input {
-    
+    width: 100%;
+    background-color: @accentColor03;
+    border: 1px solid @accentColor08;
+    border-radius: 16px;
+    padding: 8px 12px;
+
+    &:focus {
+      outline: none;
+
+      &::placeholder {
+        color: @accentColor09;
+      }
+    }
   }
 
   &__comment-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 32px;
+    font-weight: 700;
+    color: @accentColor10;
+    line-height: 32px;
+    background-color: @accentColor11;
+    border-radius: 18px;
+    transition: background-color 500ms ease;
+    cursor: pointer;
+    padding: 0 15px 0 10px;
+    margin-left: 10px;
 
+    &:hover {
+      background-color: @accentColor12;
+    }
+
+    &:active {
+      background-color: darken(@accentColor12, 5%);
+    }
+
+    &--icon {
+      height: 20px;
+      margin-right: 5px;
+    }
   }
 }

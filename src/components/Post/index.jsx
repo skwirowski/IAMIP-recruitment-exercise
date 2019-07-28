@@ -6,6 +6,7 @@ import LoaderSmall from '../LoaderSmall';
 import FavouriteButton from '../FavouriteButton';
 import '../../globalStyles/resets.css';
 import './styles/styles.css';
+import sendIcon from '../../utils/images/send.svg';
 
 const Post = ({
   onViewCommentsClick,
@@ -67,7 +68,7 @@ const Post = ({
             />
           ))}
           {comments.length !== 0 && (
-            <form>
+            <form className="post-container__comment-input-container">
               <input
                 className="post-container__comment-input"
                 type="text"
@@ -80,7 +81,12 @@ const Post = ({
                 ].join(' ')}
                 type="submit"
               >
-                Send
+                <img
+                  className="post-container__comment-button--icon"
+                  src={sendIcon}
+                  alt="Send button icon"
+                />
+                  Send
               </button>
             </form>
           )}

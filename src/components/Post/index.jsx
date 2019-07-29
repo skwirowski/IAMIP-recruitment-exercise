@@ -22,13 +22,13 @@ const Post = ({
 }) => {
   const handleViewCommentsClick = id => onViewCommentsClick(id);
 
-  const handleChangeComment = (event) => {
-    onCommentChange(event.target.value);
+  const handleChangeComment = (event, id) => {
+    onCommentChange(event.target.value, id);
   };
 
-  const handleCommentSubmit = (event) => {
+  const handleCommentSubmit = (event, id) => {
     event.preventDefault();
-    onCommentSubmit();
+    onCommentSubmit(id);
   };
 
   const handleToggleFavouritePostClick = id => onToggleFavouritePostClick(id);

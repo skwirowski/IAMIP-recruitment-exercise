@@ -6,6 +6,7 @@ import ReactPaginate from "react-paginate";
 import postActions from "../actions/postActions";
 // import commentActions from "../actions/commentActions";
 import { setNumberToArray } from "../utils/helperFunctions";
+import getEmail from "../services/getEmailAPI";
 
 import Loader from "../components/Loader";
 import Post from "../components/Post";
@@ -20,8 +21,8 @@ class App extends PureComponent {
       resultsOffset: 0,
       resultsLimit: 10,
       favouritePostsIds: [],
-      newCommentContent: '',
-      newComments: [],
+      newCommentContent: {},
+      newComments: []
     };
 
     // if (window.performance) {
@@ -31,7 +32,6 @@ class App extends PureComponent {
     //     alert("This page is not reloaded");
     //   }
     // }
-
   }
 
   componentDidMount() {
@@ -50,7 +50,7 @@ class App extends PureComponent {
     }
   }
 
-  handlePageClick = (posts) => {
+  handlePageClick = posts => {
     let selected = posts.selected;
     let offset = Math.ceil(selected * 10);
     const { fetchPosts } = this.props;
@@ -61,16 +61,41 @@ class App extends PureComponent {
     });
   };
 
-  handleCommentsClick = (id) => {
+  handleCommentsClick = id => {
     const { fetchComments } = this.props;
     fetchComments(id);
-  }
+  };
 
-  handleCommentChange = (commentContent) => {
-    this.setState({ newCommentContent: commentContent })
-  }
+  handleCommentChange = (commentContent, id) => {
+    this.setState({
+      newCommentContent: {
+        postId: id,
+        commentContent
+      }
+    });
+  };
 
-  handleCommentSubmit = () => console.log("Comment Submited")
+  handleCommentSubmit = id => {
+    const { newComments, newCommentContent } = this.state;
+    getEmail().then(data => {
+      this.setState(
+        {
+          newComments: [
+            ...newComments,
+            {
+              body: newCommentContent.commentContent,
+              email: data.results[0].email,
+              id: Date.now(),
+              name: "",
+              postId: id
+            }
+          ],
+          newCommentContent: {}
+        },
+        () => console.log(this.state)
+      );
+    });
+  };
 
   onToggleFavouritePostClick = (id, payload) => {
     const { toggleFavouritePost } = this.props;
@@ -79,9 +104,9 @@ class App extends PureComponent {
 
     setNumberToArray(id, favouritePostsIds);
     this.setState({
-      favouritePostsIds,
+      favouritePostsIds
     });
-  }
+  };
 
   render() {
     const { posts, isLoading } = this.props.postReducer;
@@ -90,32 +115,36 @@ class App extends PureComponent {
     // console.log("Comment Reducer LOG: ", this.props.commentReducer);
     return (
       <div className="app">
-        {
-          isLoading ? (
-            <Loader />
-          ) : (
-            <div>
-              {
-                posts.map(post => (
-                  <Post
-                    key={post.id}
-                    loading={post.isLoading}
-                    title={post.title}
-                    body={post.body}
-                    onViewCommentsClick={() => this.handleCommentsClick(post.id)}
-                    comments={post.comments}
-                    isFavourite={post.isFavourite}
-                    post={post}
-                    onToggleFavouritePostClick={() => this.onToggleFavouritePostClick(post.id, !post.isFavourite)}
-                    newCommentContent={newCommentContent}
-                    onCommentChange={this.handleCommentChange}
-                    onCommentSubmit={this.handleCommentSubmit}
-                  />
-                ))
-              }
-            </div>
-          )
-        }
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <div>
+            {posts.map(post => (
+              <Post
+                key={post.id}
+                loading={post.isLoading}
+                title={post.title}
+                body={post.body}
+                onViewCommentsClick={() => this.handleCommentsClick(post.id)}
+                comments={post.comments}
+                isFavourite={post.isFavourite}
+                post={post}
+                onToggleFavouritePostClick={() =>
+                  this.onToggleFavouritePostClick(post.id, !post.isFavourite)
+                }
+                newCommentContent={
+                  newCommentContent.postId === post.id
+                    ? newCommentContent.commentContent
+                    : ""
+                }
+                onCommentChange={newCommentContent =>
+                  this.handleCommentChange(newCommentContent, post.id)
+                }
+                onCommentSubmit={() => this.handleCommentSubmit(post.id)}
+              />
+            ))}
+          </div>
+        )}
         <ReactPaginate
           previousLabel={"<<"}
           nextLabel={">>"}

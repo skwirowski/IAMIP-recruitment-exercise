@@ -1,34 +1,39 @@
 @import '../../globalStyles/settings';
 
-.pagination {
-  display: flex;
-  justify-content: center;
-  list-style: none;
-  width: 80%;
-  font-family: @primaryFontFamily;
-  font-size: @smallFontSize;
-  background-color: #FFFFFF;
-  border: 1px solid #dddfe2;
-  border-radius: 4px;
-  padding: 15px;
-  margin: 15px auto;
+.app {
+  max-width: 1200px;
+  margin: auto;
 
-  li {
-    a {
-      padding: 8px 12px;
-      background-color: transparent;
-      color: @secondaryColor;
-      cursor: pointer;
+  .pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    width: 80%;
+    font-family: @primaryFontFamily;
+    font-size: @smallFontSize;
+    background-color: #FFFFFF;
+    border: 1px solid #dddfe2;
+    border-radius: 4px;
+    padding: 15px;
+    margin: 15px auto;
 
-      &:hover {
-        transition: all .3s linear;
-        border-radius: .125rem;
-        background-color: #eee;
+    li {
+      a {
+        padding: 8px 12px;
+        background-color: transparent;
+        color: @secondaryColor;
+        cursor: pointer;
+
+        &:hover {
+          transition: all .3s linear;
+          border-radius: .125rem;
+          background-color: #eee;
+        }
       }
     }
-  }
 
-  li.active {
-    font-weight: @primaryFontWeightBlack;
+    li.active {
+      font-weight: @primaryFontWeightBlack;
+    }
   }
 }

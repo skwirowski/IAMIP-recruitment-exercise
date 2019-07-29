@@ -16,8 +16,21 @@ const Post = ({
   loading,
   isFavourite,
   onToggleFavouritePostClick,
+  onCommentChange,
+  newCommentContent,
+  onCommentSubmit,
 }) => {
   const handleViewCommentsClick = id => onViewCommentsClick(id);
+
+  const handleChangeComment = (event) => {
+    onCommentChange(event.target.value);
+  };
+
+  const handleCommentSubmit = (event) => {
+    event.preventDefault();
+    onCommentSubmit();
+  };
+
   const handleToggleFavouritePostClick = id => onToggleFavouritePostClick(id);
 
   return (
@@ -68,10 +81,15 @@ const Post = ({
             />
           ))}
           {comments.length !== 0 && (
-            <form className="post-container__comment-input-container">
+            <form
+              className="post-container__comment-input-container"
+              onSubmit={handleCommentSubmit}
+            >
               <input
                 className="post-container__comment-input"
                 type="text"
+                onChange={handleChangeComment}
+                value={newCommentContent}
                 placeholder="Type your comment..."
               />
               <button
@@ -113,6 +131,9 @@ Post.propTypes = {
   loading: PropTypes.bool,
   isFavourite: PropTypes.bool,
   onToggleFavouritePostClick: PropTypes.func.isRequired,
+  onCommentChange: PropTypes.func.isRequired,
+  newCommentContent: PropTypes.string,
+  onCommentSubmit: PropTypes.func.isRequired,
 };
 
 Post.defaultProps = {
@@ -121,6 +142,7 @@ Post.defaultProps = {
   body: '',
   loading: false,
   isFavourite: false,
+  newCommentContent: '',
 };
 
 export default Post;

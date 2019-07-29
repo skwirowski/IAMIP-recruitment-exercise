@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap');
-@import url('https://fonts.googleapis.com/css?family=Roboto:400,900&display=swap');
-.pagination {
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700,900&display=swap');
+.app {
+  max-width: 1200px;
+  margin: auto;
+}
+.app .pagination {
   display: flex;
   justify-content: center;
   list-style: none;
@@ -13,17 +17,17 @@
   padding: 15px;
   margin: 15px auto;
 }
-.pagination li a {
+.app .pagination li a {
   padding: 8px 12px;
   background-color: transparent;
   color: #3c3c3c;
   cursor: pointer;
 }
-.pagination li a:hover {
+.app .pagination li a:hover {
   transition: all .3s linear;
   border-radius: .125rem;
   background-color: #eee;
 }
-.pagination li.active {
+.app .pagination li.active {
   font-weight: 900;
 }

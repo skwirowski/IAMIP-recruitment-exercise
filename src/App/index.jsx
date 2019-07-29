@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import ReactPaginate from "react-paginate";
 
 import postActions from "../actions/postActions";
-import commentActions from "../actions/commentActions";
+// import commentActions from "../actions/commentActions";
 import { setNumberToArray } from "../utils/helperFunctions";
 
 import Loader from "../components/Loader";
@@ -20,6 +20,8 @@ class App extends PureComponent {
       resultsOffset: 0,
       resultsLimit: 10,
       favouritePostsIds: [],
+      newCommentContent: '',
+      newComments: [],
     };
 
     // if (window.performance) {
@@ -59,10 +61,16 @@ class App extends PureComponent {
     });
   };
 
-  onViewCommentsClick = (id) => {
+  handleCommentsClick = (id) => {
     const { fetchComments } = this.props;
-    fetchComments(id)
+    fetchComments(id);
   }
+
+  handleCommentChange = (commentContent) => {
+    this.setState({ newCommentContent: commentContent })
+  }
+
+  handleCommentSubmit = () => console.log("Comment Submited")
 
   onToggleFavouritePostClick = (id, payload) => {
     const { toggleFavouritePost } = this.props;
@@ -77,10 +85,11 @@ class App extends PureComponent {
 
   render() {
     const { posts, isLoading } = this.props.postReducer;
+    const { newCommentContent } = this.state;
     // console.log("Post Reducer LOG: ", this.props.postReducer);
     // console.log("Comment Reducer LOG: ", this.props.commentReducer);
     return (
-      <div className="App">
+      <div className="app">
         {
           isLoading ? (
             <Loader />
@@ -93,11 +102,14 @@ class App extends PureComponent {
                     loading={post.isLoading}
                     title={post.title}
                     body={post.body}
-                    onViewCommentsClick={() => this.onViewCommentsClick(post.id)}
+                    onViewCommentsClick={() => this.handleCommentsClick(post.id)}
                     comments={post.comments}
                     isFavourite={post.isFavourite}
                     post={post}
                     onToggleFavouritePostClick={() => this.onToggleFavouritePostClick(post.id, !post.isFavourite)}
+                    newCommentContent={newCommentContent}
+                    onCommentChange={this.handleCommentChange}
+                    onCommentSubmit={this.handleCommentSubmit}
                   />
                 ))
               }
@@ -126,7 +138,7 @@ const mapStateToProps = state => ({ ...state });
 
 const mapDispatchToProps = dispatch => ({
   fetchPosts: (start, limit) => dispatch(postActions.fetchPosts(start, limit)),
-  fetchComments: id => dispatch(commentActions.fetchComments(id)),
+  fetchComments: id => dispatch(postActions.fetchComments(id)),
   toggleFavouritePost: (id, payload) => dispatch(postActions.toggleFavouritePost(id, payload)),
   setFavouritePosts: ids => dispatch(postActions.setFavouritePosts(ids)),
 });

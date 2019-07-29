@@ -27,17 +27,48 @@ const reducer = (state = INITIAL_STATE, action) => {
         isLoading: false,
         error: action.payload,
       };
-    case types.ADD_COMMENTS_TO_POST:
+    case types.COMMENTS_FETCH_REQUESTED:
       return {
         ...state,
         posts: state.posts.map(post => (
-          (action.id === post.id) ? { ...post, comments: action.payload } : post)),
+          (action.id === post.id) ? { ...post, isLoading: true } : post)),
       };
-    case types.SET_COMMENTS_FETCH_LOADER:
+    case types.COMMENTS_FETCH_SUCCEEDED:
       return {
         ...state,
         posts: state.posts.map(post => (
-          (action.id === post.id) ? { ...post, isLoading: action.payload } : post)),
+          (action.id === post.id) ? (
+            {
+              ...post,
+              isLoading: false,
+              comments: action.payload,
+            }) : (
+            post)
+        )),
+      };
+    case types.COMMENTS_FETCH_FAILED:
+      return {
+        ...state,
+        posts: state.posts.map(post => (
+          (action.id === post.id) ? { ...post, isLoading: false, error: action.payload } : post)),
+      };
+    // case types.ADD_COMMENTS_TO_POST:
+    //   return {
+    //     ...state,
+    //     posts: state.posts.map(post => (
+    //       (action.id === post.id) ? { ...post, comments: action.payload } : post)),
+    //   };
+    case types.ADD_NEW_COMMENT_TO_POST:
+      return {
+        ...state,
+        posts: state.posts.map(post => (
+          (action.id === post.id) ? (
+            {
+              ...post,
+              comments: [...post.comments, action.payload],
+            }) : (
+            post)
+        )),
       };
     case types.TOGGLE_FAVOURITE_POST:
       return {

@@ -1,3 +1,2 @@
-const primaryApiUrl = 'https://jsonplaceholder.typicode.com';
-
-export default primaryApiUrl;
+export const primaryApiUrl = 'https://jsonplaceholder.typicode.com';
+export const secondaryApiUrl = 'https://randomuser.me/api/';

@@ -6,6 +6,11 @@ const fetchPosts = (start, limit) => ({
   limit,
 });
 
+const fetchComments = id => ({
+  type: types.COMMENTS_FETCH_REQUESTED,
+  id,
+});
+
 const addCommentsToPost = (id, payload) => ({
   type: types.ADD_COMMENTS_TO_POST,
   id,
@@ -31,6 +36,7 @@ const setFavouritePosts = ids => ({
 
 export default {
   fetchPosts,
+  fetchComments,
   addCommentsToPost,
   setCommentsFetchLoader,
   toggleFavouritePost,

@@ -140,7 +140,11 @@ class App extends PureComponent {
                 onCommentChange={newCommentContent =>
                   this.handleCommentChange(newCommentContent, post.id)
                 }
-                onCommentSubmit={() => this.handleCommentSubmit(post.id)}
+                onCommentSubmit={() => {
+                  if (newCommentContent.postId === post.id && newCommentContent.commentContent) {
+                    this.handleCommentSubmit(post.id)
+                  }
+                }}
               />
             ))}
           </div>

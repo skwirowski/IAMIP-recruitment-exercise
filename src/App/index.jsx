@@ -22,7 +22,9 @@ class App extends PureComponent {
       resultsLimit: 10,
       favouritePostsIds: [],
       newCommentContent: {},
-      newComments: []
+      newComments: [],
+      userEmail: '',
+      isEmailFetching: false,
     };
 
     // if (window.performance) {
@@ -37,7 +39,20 @@ class App extends PureComponent {
   componentDidMount() {
     const { fetchPosts } = this.props;
     const { resultsOffset, resultsLimit } = this.state;
+
     fetchPosts(resultsOffset, resultsLimit);
+
+    this.setState({
+      isEmailFetching: true,
+    },
+    () => {
+      getEmail().then(data => {
+        this.setState({
+          userEmail: data.results[0].email,
+          isEmailFetching: false,
+        })
+      });
+    });
   }
 
   componentDidUpdate() {
@@ -76,25 +91,25 @@ class App extends PureComponent {
   };
 
   handleCommentSubmit = id => {
-    const { newComments, newCommentContent } = this.state;
-    getEmail().then(data => {
-      this.setState(
-        {
-          newComments: [
-            ...newComments,
-            {
-              body: newCommentContent.commentContent,
-              email: data.results[0].email,
-              id: Date.now(),
-              name: "",
-              postId: id
-            }
-          ],
-          newCommentContent: {}
-        },
-        () => console.log(this.state)
-      );
+    const { newComments, newCommentContent, userEmail } = this.state;
+    const { addNewCommentToPost } = this.props;
+    const newComment = {
+      body: newCommentContent.commentContent,
+      email: userEmail,
+      id: Date.now(),
+      name: "",
+      postId: id
+    };
+
+    this.setState({
+      newComments: [
+        ...newComments,
+        newComment,
+      ],
+      newCommentContent: {}
     });
+
+    addNewCommentToPost(id, newComment);
   };
 
   onToggleFavouritePostClick = (id, payload) => {
@@ -110,12 +125,12 @@ class App extends PureComponent {
 
   render() {
     const { posts, isLoading } = this.props.postReducer;
-    const { newCommentContent } = this.state;
+    const { newCommentContent, isEmailFetching } = this.state;
     // console.log("Post Reducer LOG: ", this.props.postReducer);
     // console.log("Comment Reducer LOG: ", this.props.commentReducer);
     return (
       <div className="app">
-        {isLoading ? (
+        {(isLoading || isEmailFetching) ? (
           <Loader />
         ) : (
           <div>
@@ -174,6 +189,7 @@ const mapDispatchToProps = dispatch => ({
   fetchComments: id => dispatch(postActions.fetchComments(id)),
   toggleFavouritePost: (id, payload) => dispatch(postActions.toggleFavouritePost(id, payload)),
   setFavouritePosts: ids => dispatch(postActions.setFavouritePosts(ids)),
+  addNewCommentToPost: (id, payload) => dispatch(postActions.addNewCommentToPost(id, payload),)
 });
 
 App.propTypes = {

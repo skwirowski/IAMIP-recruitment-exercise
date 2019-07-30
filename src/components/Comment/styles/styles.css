@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,700,900&display=swap');
 .comment-container {
+  display: block;
+}
+.comment-container .comment-wrapper {
   display: inline-block;
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
@@ -9,10 +12,10 @@
   padding: 8px 10px;
   margin: 0 30px 8px;
 }
-.comment-container__content {
+.comment-container .comment-wrapper__content {
   margin: 0;
 }
-.comment-container__content span {
+.comment-container .comment-wrapper__content span {
   font-weight: 700;
   color: #385898;
   margin-right: 5px;

@@ -5,10 +5,12 @@ import './styles/styles.css';
 
 const Comment = ({ email, body }) => (
   <div className="comment-container">
-    <p className="comment-container__content">
-      <span>{ email }</span>
-      { body }
-    </p>
+    <div className="comment-wrapper">
+      <p className="comment-wrapper__content">
+        <span>{ email }</span>
+        { body }
+      </p>
+    </div>
   </div>
 );
 

@@ -11,14 +11,14 @@ const fetchComments = id => ({
   id,
 });
 
-// const addCommentsToPost = (id, payload) => ({
-//   type: types.ADD_COMMENTS_TO_POST,
-//   id,
-//   payload,
-// });
-
 const addNewCommentToPost = (id, payload) => ({
   type: types.ADD_NEW_COMMENT_TO_POST,
+  id,
+  payload,
+});
+
+const setNewCommentsToPost = (id, payload) => ({
+  type: types.SET_NEW_COMMENTS_TO_POST,
   id,
   payload,
 });
@@ -38,6 +38,7 @@ export default {
   fetchPosts,
   fetchComments,
   addNewCommentToPost,
+  setNewCommentsToPost,
   toggleFavouritePost,
   setFavouritePosts,
 };

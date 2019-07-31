@@ -5,7 +5,7 @@ import ReactPaginate from "react-paginate";
 
 import postActions from "../actions/postActions";
 // import commentActions from "../actions/commentActions";
-import { setNumberToArray } from "../utils/helperFunctions";
+import { setNumberToArray, setCommentsToPost, func } from "../utils/helperFunctions";
 import getEmail from "../services/getEmailAPI";
 
 import Loader from "../components/Loader";
@@ -125,7 +125,7 @@ class App extends PureComponent {
 
   render() {
     const { posts, isLoading } = this.props.postReducer;
-    const { newCommentContent, isEmailFetching } = this.state;
+    const { newCommentContent, newComments, isEmailFetching } = this.state;
     // console.log("Post Reducer LOG: ", this.props.postReducer);
     // console.log("Comment Reducer LOG: ", this.props.commentReducer);
     return (
@@ -140,7 +140,7 @@ class App extends PureComponent {
                 loading={post.isLoading}
                 title={post.title}
                 body={post.body}
-                onViewCommentsClick={() => this.handleCommentsClick(post.id)}
+                onViewCommentsClick={() => this.handleCommentsClick(post.id, post, newComments)}
                 comments={post.comments}
                 isFavourite={post.isFavourite}
                 post={post}
@@ -189,7 +189,8 @@ const mapDispatchToProps = dispatch => ({
   fetchComments: id => dispatch(postActions.fetchComments(id)),
   toggleFavouritePost: (id, payload) => dispatch(postActions.toggleFavouritePost(id, payload)),
   setFavouritePosts: ids => dispatch(postActions.setFavouritePosts(ids)),
-  addNewCommentToPost: (id, payload) => dispatch(postActions.addNewCommentToPost(id, payload),)
+  addNewCommentToPost: (id, payload) => dispatch(postActions.addNewCommentToPost(id, payload)),
+  setNewCommentsToPost: (id, payload) => dispatch(postActions.setNewCommentsToPost(id, payload)),
 });
 
 App.propTypes = {

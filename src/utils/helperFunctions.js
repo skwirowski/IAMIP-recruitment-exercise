@@ -1,13 +1,3 @@
-const newNumber = 9;
-const exampleArray = [1, 2, 3];
-
-const objArr = [
-  { id: 1 },
-  { id: 2 },
-  { id: 3 },
-  { id: 4 },
-];
-
 export const setNumberToArray = (num, array) => {
   const checkForDuplicates = array.indexOf(num);
   const newArray = array;
@@ -21,10 +11,28 @@ export const setNumberToArray = (num, array) => {
   return newArray;
 };
 
-export const placeholder = (array, ids) => (
-  array.map(item => (
-    (ids.indexOf(item.id) === -1) ? { ...item, isChecked: true } : item
-  ))
-);
+export const setCommentsToPost = (post, comments) => {
+  const newObject = post;
 
-// console.log(placeholder(objArr, exampleArray));
+  for (let i = 0; i < comments.length; i += 1) {
+    if (newObject.id === comments[i].postId) {
+      newObject.comments.push(comments[i]);
+    }
+  }
+  return newObject;
+};
+
+export const func = (array1, array2) => {
+  const postsArray = array1;
+  const commentsArray = array2;
+  postsArray.map((item) => {
+    for (let i = 0; i < commentsArray.length; i += 1) {
+      if (item.id === array2[i].postId) {
+        item.comments.push(array2[i]);
+        commentsArray.splice(i, 1);
+        i = -1;
+      }
+    }
+  });
+  return postsArray;
+};

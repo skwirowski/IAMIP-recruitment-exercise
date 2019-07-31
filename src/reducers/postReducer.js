@@ -2,7 +2,7 @@ import types from '../static/reduxTypes';
 
 const INITIAL_STATE = {
   isLoading: false,
-  canSetFavouritePosts: false,
+  canSetNewComments: false,
   posts: [],
   error: null,
 };
@@ -52,13 +52,19 @@ const reducer = (state = INITIAL_STATE, action) => {
         posts: state.posts.map(post => (
           (action.id === post.id) ? { ...post, isLoading: false, error: action.payload } : post)),
       };
-    // case types.ADD_COMMENTS_TO_POST:
-    //   return {
-    //     ...state,
-    //     posts: state.posts.map(post => (
-    //       (action.id === post.id) ? { ...post, comments: action.payload } : post)),
-    //   };
     case types.ADD_NEW_COMMENT_TO_POST:
+      return {
+        ...state,
+        posts: state.posts.map(post => (
+          (action.id === post.id) ? (
+            {
+              ...post,
+              comments: [...post.comments, action.payload],
+            }) : (
+            post)
+        )),
+      };
+    case types.SET_NEW_COMMENTS_TO_POST:
       return {
         ...state,
         posts: state.posts.map(post => (

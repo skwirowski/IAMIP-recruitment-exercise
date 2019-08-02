@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 
 import postReducer from './postReducer';
-import commentReducer from './commentReducer';
+import emailReducer from './emailReducer';
 
 export default combineReducers({
   postReducer,
-  commentReducer,
+  emailReducer,
 });

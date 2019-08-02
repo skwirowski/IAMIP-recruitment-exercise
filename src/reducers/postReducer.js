@@ -1,8 +1,8 @@
 import types from '../static/reduxTypes';
 
 const INITIAL_STATE = {
-  isLoading: false,
-  canSetNewComments: false,
+  postsLoading: false,
+  postsLoaded: false,
   posts: [],
   error: null,
 };
@@ -12,45 +12,46 @@ const reducer = (state = INITIAL_STATE, action) => {
     case types.POSTS_FETCH_REQUESTED:
       return {
         ...state,
-        isLoading: true,
+        postsLoading: true,
+        postsLoaded: false,
       };
     case types.POSTS_FETCH_SUCCEEDED:
       return {
         ...state,
-        isLoading: false,
-        canSetFavouritePosts: true,
+        postsLoading: false,
+        postsLoaded: true,
         posts: action.payload,
       };
     case types.POSTS_FETCH_FAILED:
       return {
         ...state,
-        isLoading: false,
+        postsLoading: false,
+        postsLoaded: false,
         error: action.payload,
       };
-    case types.COMMENTS_FETCH_REQUESTED:
+    case types.SET_POSTS_LOADED_FLAG:
+      return {
+        ...state,
+        postsLoaded: action.flag,
+      };
+    case types.TOGGLE_FAVOURITE_POST:
       return {
         ...state,
         posts: state.posts.map(post => (
-          (action.id === post.id) ? { ...post, isLoading: true } : post)),
+          (action.id === post.id) ? { ...post, isFavourite: action.payload } : post
+        )),
       };
-    case types.COMMENTS_FETCH_SUCCEEDED:
+    case types.ADD_COMMENTS_TO_POST:
       return {
         ...state,
         posts: state.posts.map(post => (
           (action.id === post.id) ? (
             {
               ...post,
-              isLoading: false,
               comments: action.payload,
             }) : (
             post)
         )),
-      };
-    case types.COMMENTS_FETCH_FAILED:
-      return {
-        ...state,
-        posts: state.posts.map(post => (
-          (action.id === post.id) ? { ...post, isLoading: false, error: action.payload } : post)),
       };
     case types.ADD_NEW_COMMENT_TO_POST:
       return {
@@ -62,33 +63,6 @@ const reducer = (state = INITIAL_STATE, action) => {
               comments: [...post.comments, action.payload],
             }) : (
             post)
-        )),
-      };
-    case types.SET_NEW_COMMENTS_TO_POST:
-      return {
-        ...state,
-        posts: state.posts.map(post => (
-          (action.id === post.id) ? (
-            {
-              ...post,
-              comments: [...post.comments, action.payload],
-            }) : (
-            post)
-        )),
-      };
-    case types.TOGGLE_FAVOURITE_POST:
-      return {
-        ...state,
-        posts: state.posts.map(post => (
-          (action.id === post.id) ? { ...post, isFavourite: action.payload } : post
-        )),
-      };
-    case types.SET_FAVOURITE_POSTS:
-      return {
-        ...state,
-        canSetFavouritePosts: false,
-        posts: state.posts.map(post => (
-          (action.ids.indexOf(post.id) !== -1) ? { ...post, isFavourite: true } : post
         )),
       };
     default:

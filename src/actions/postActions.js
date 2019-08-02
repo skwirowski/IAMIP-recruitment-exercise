@@ -6,21 +6,9 @@ const fetchPosts = (start, limit) => ({
   limit,
 });
 
-const fetchComments = id => ({
-  type: types.COMMENTS_FETCH_REQUESTED,
-  id,
-});
-
-const addNewCommentToPost = (id, payload) => ({
-  type: types.ADD_NEW_COMMENT_TO_POST,
-  id,
-  payload,
-});
-
-const setNewCommentsToPost = (id, payload) => ({
-  type: types.SET_NEW_COMMENTS_TO_POST,
-  id,
-  payload,
+const setPostsLoadedFlag = flag => ({
+  type: types.SET_POSTS_LOADED_FLAG,
+  flag,
 });
 
 const toggleFavouritePost = (id, payload) => ({
@@ -29,16 +17,8 @@ const toggleFavouritePost = (id, payload) => ({
   payload,
 });
 
-const setFavouritePosts = ids => ({
-  type: types.SET_FAVOURITE_POSTS,
-  ids,
-});
-
 export default {
   fetchPosts,
-  fetchComments,
-  addNewCommentToPost,
-  setNewCommentsToPost,
+  setPostsLoadedFlag,
   toggleFavouritePost,
-  setFavouritePosts,
 };

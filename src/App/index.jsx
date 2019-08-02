@@ -4,9 +4,10 @@ import PropTypes from "prop-types";
 import ReactPaginate from "react-paginate";
 
 import postActions from "../actions/postActions";
-// import commentActions from "../actions/commentActions";
-import { setNumberToArray, setCommentsToPost, func } from "../utils/helperFunctions";
-import getEmail from "../services/getEmailAPI";
+import commentActions from "../actions/commentActions";
+import emailActions from "../actions/emailActions";
+import getComments from "../services/getCommentsAPI";
+import { sliceArrayPiece } from "../utils/helperFunctions";
 
 import Loader from "../components/Loader";
 import Post from "../components/Post";
@@ -18,13 +19,10 @@ class App extends PureComponent {
     super(props);
 
     this.state = {
+      page: [],
       resultsOffset: 0,
       resultsLimit: 10,
-      favouritePostsIds: [],
       newCommentContent: {},
-      newComments: [],
-      userEmail: '',
-      isEmailFetching: false,
     };
 
     // if (window.performance) {
@@ -37,48 +35,56 @@ class App extends PureComponent {
   }
 
   componentDidMount() {
-    const { fetchPosts } = this.props;
-    const { resultsOffset, resultsLimit } = this.state;
+    const { fetchPosts, fetchEmail } = this.props;
 
-    fetchPosts(resultsOffset, resultsLimit);
-
-    this.setState({
-      isEmailFetching: true,
-    },
-    () => {
-      getEmail().then(data => {
-        this.setState({
-          userEmail: data.results[0].email,
-          isEmailFetching: false,
-        })
-      });
-    });
+    fetchPosts();
+    fetchEmail();
   }
 
   componentDidUpdate() {
-    const { setFavouritePosts } = this.props;
-    const { canSetFavouritePosts } = this.props.postReducer;
-    const { favouritePostsIds } = this.state;
+    const { setPostsLoadedFlag } = this.props;
+    const { posts, postsLoaded } = this.props.postReducer;
+    const { resultsOffset, resultsLimit } = this.state;
 
-    if (canSetFavouritePosts) {
-      setFavouritePosts(favouritePostsIds);
+    if (postsLoaded) {
+      const newPage = sliceArrayPiece(posts, resultsOffset, resultsLimit);
+
+      this.setState({ page: newPage });
+      setPostsLoadedFlag(false);
     }
   }
 
   handlePageClick = posts => {
+    const { setPostsLoadedFlag } = this.props;
     let selected = posts.selected;
     let offset = Math.ceil(selected * 10);
-    const { fetchPosts } = this.props;
 
     this.setState({ resultsOffset: offset }, () => {
-      const { resultsOffset, resultsLimit } = this.state;
-      fetchPosts(resultsOffset, resultsLimit);
+      setPostsLoadedFlag(true);
     });
   };
 
   handleCommentsClick = id => {
-    const { fetchComments } = this.props;
-    fetchComments(id);
+    const { addCommentsToPost, setPostsLoadedFlag } = this.props;
+    const setCommentLoadingFlag = flag => {
+      this.setState({
+        ...this.state,
+        page: this.state.page.map(post => (
+          (id === post.id) ? ({
+            ...post,
+            commentsLoading: flag,
+          }) : (
+            post)
+        ))
+      });
+    }
+
+    setCommentLoadingFlag(true);
+
+    getComments(id)
+    .then(data => addCommentsToPost(id, data))
+    .then(() => setPostsLoadedFlag(true))
+    .then(() => setCommentLoadingFlag(false));
   };
 
   handleCommentChange = (commentContent, id) => {
@@ -91,8 +97,9 @@ class App extends PureComponent {
   };
 
   handleCommentSubmit = id => {
-    const { newComments, newCommentContent, userEmail } = this.state;
-    const { addNewCommentToPost } = this.props;
+    const { newCommentContent } = this.state;
+    const { addNewCommentToPost, setPostsLoadedFlag } = this.props;
+    const { userEmail } = this.props.emailReducer;
     const newComment = {
       body: newCommentContent.commentContent,
       email: userEmail,
@@ -101,49 +108,38 @@ class App extends PureComponent {
       postId: id
     };
 
-    this.setState({
-      newComments: [
-        ...newComments,
-        newComment,
-      ],
-      newCommentContent: {}
-    });
+    this.setState({ newCommentContent: {} });
 
     addNewCommentToPost(id, newComment);
+    setPostsLoadedFlag(true);
   };
 
   onToggleFavouritePostClick = (id, payload) => {
-    const { toggleFavouritePost } = this.props;
-    const { favouritePostsIds } = this.state;
-    toggleFavouritePost(id, payload);
+    const { toggleFavouritePost, setPostsLoadedFlag } = this.props;
 
-    setNumberToArray(id, favouritePostsIds);
-    this.setState({
-      favouritePostsIds
-    });
+    toggleFavouritePost(id, payload);
+    setPostsLoadedFlag(true);
   };
 
   render() {
-    const { posts, isLoading } = this.props.postReducer;
-    const { newCommentContent, newComments, isEmailFetching } = this.state;
-    // console.log("Post Reducer LOG: ", this.props.postReducer);
-    // console.log("Comment Reducer LOG: ", this.props.commentReducer);
+    const { postsLoading } = this.props.postReducer;
+    const { userEmailLoading } = this.props.emailReducer;
+    const { page, newCommentContent, newComments } = this.state;
+    console.log()
     return (
       <div className="app">
-        {(isLoading || isEmailFetching) ? (
+        {(postsLoading || userEmailLoading) ? (
           <Loader />
         ) : (
           <div>
-            {posts.map(post => (
+            {page.map(post => (
               <Post
                 key={post.id}
-                loading={post.isLoading}
-                title={post.title}
-                body={post.body}
-                onViewCommentsClick={() => this.handleCommentsClick(post.id, post, newComments)}
-                comments={post.comments}
-                isFavourite={post.isFavourite}
                 post={post}
+                isFavourite={post.isFavourite}
+                commentsLoading={post.commentsLoading}
+                comments={post.comments}
+                onViewCommentsClick={() => this.handleCommentsClick(post.id)}
                 onToggleFavouritePostClick={() =>
                   this.onToggleFavouritePostClick(post.id, !post.isFavourite)
                 }
@@ -186,17 +182,17 @@ const mapStateToProps = state => ({ ...state });
 
 const mapDispatchToProps = dispatch => ({
   fetchPosts: (start, limit) => dispatch(postActions.fetchPosts(start, limit)),
-  fetchComments: id => dispatch(postActions.fetchComments(id)),
+  fetchEmail: () => dispatch(emailActions.fetchEmail()),
+  setPostsLoadedFlag: flag => dispatch(postActions.setPostsLoadedFlag(flag)),
+  addCommentsToPost: (id, payload) => dispatch(commentActions.addCommentsToPost(id, payload)),
   toggleFavouritePost: (id, payload) => dispatch(postActions.toggleFavouritePost(id, payload)),
-  setFavouritePosts: ids => dispatch(postActions.setFavouritePosts(ids)),
-  addNewCommentToPost: (id, payload) => dispatch(postActions.addNewCommentToPost(id, payload)),
-  setNewCommentsToPost: (id, payload) => dispatch(postActions.setNewCommentsToPost(id, payload)),
+  addNewCommentToPost: (id, payload) => dispatch(commentActions.addNewCommentToPost(id, payload)),
 });
 
 App.propTypes = {
   fetchPosts: PropTypes.func.isRequired,
   state: PropTypes.shape({
-    isLoading: PropTypes.bool,
+    postsLoading: PropTypes.bool,
     posts: PropTypes.array,
     error: PropTypes.oneOfType([
       PropTypes.string,

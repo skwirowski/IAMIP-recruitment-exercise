@@ -1,3 +1,9 @@
+export const sliceArrayPiece = (array, start, end) => {
+  const endIndex = start + end;
+  const newArray = array.slice(start, endIndex);
+  return newArray;
+};
+
 export const setNumberToArray = (num, array) => {
   const checkForDuplicates = array.indexOf(num);
   const newArray = array;

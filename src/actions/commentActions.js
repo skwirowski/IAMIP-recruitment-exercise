@@ -1,10 +1,18 @@
 import types from '../static/reduxTypes';
 
-// const fetchComments = id => ({
-//   type: types.COMMENTS_FETCH_REQUESTED,
-//   id,
-// });
+const addCommentsToPost = (id, payload) => ({
+  type: types.ADD_COMMENTS_TO_POST,
+  id,
+  payload,
+});
+
+const addNewCommentToPost = (id, payload) => ({
+  type: types.ADD_NEW_COMMENT_TO_POST,
+  id,
+  payload,
+});
 
 export default {
-  // fetchComments,
+  addCommentsToPost,
+  addNewCommentToPost,
 };

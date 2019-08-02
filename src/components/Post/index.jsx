@@ -9,12 +9,11 @@ import './styles/styles.css';
 import sendIcon from '../../utils/images/send.svg';
 
 const Post = ({
-  onViewCommentsClick,
-  comments,
-  title,
-  body,
-  loading,
+  post,
   isFavourite,
+  commentsLoading,
+  comments,
+  onViewCommentsClick,
   onToggleFavouritePostClick,
   onCommentChange,
   newCommentContent,
@@ -35,8 +34,8 @@ const Post = ({
 
   return (
     <div className="post-container">
-      <h2 className="post-container__title">{title}</h2>
-      <p className="post-container__body">{body}</p>
+      <h2 className="post-container__title">{post.title}</h2>
+      <p className="post-container__body">{post.body}</p>
       <span
         className={[
           'global__separator-line',
@@ -62,12 +61,12 @@ const Post = ({
         ].join(' ')}
         type="button"
         onClick={handleViewCommentsClick}
-        disabled={comments.length !== 0 || loading}
+        disabled={comments.length !== 0 || commentsLoading}
       >
         View comments
       </button>
 
-      {loading ? (
+      {commentsLoading ? (
         <div className="post-container__comments-loader">
           <LoaderSmall />
         </div>
@@ -116,7 +115,12 @@ const Post = ({
 };
 
 Post.propTypes = {
-  onViewCommentsClick: PropTypes.func.isRequired,
+  post: PropTypes.shape({
+    title: PropTypes.string,
+    body: PropTypes.string,
+  }),
+  isFavourite: PropTypes.bool,
+  commentsLoading: PropTypes.bool,
   comments: PropTypes.arrayOf(
     PropTypes.shape({
       body: PropTypes.string,
@@ -126,10 +130,7 @@ Post.propTypes = {
       postId: PropTypes.number,
     }),
   ),
-  title: PropTypes.string,
-  body: PropTypes.string,
-  loading: PropTypes.bool,
-  isFavourite: PropTypes.bool,
+  onViewCommentsClick: PropTypes.func.isRequired,
   onToggleFavouritePostClick: PropTypes.func.isRequired,
   onCommentChange: PropTypes.func.isRequired,
   newCommentContent: PropTypes.string,
@@ -137,11 +138,13 @@ Post.propTypes = {
 };
 
 Post.defaultProps = {
-  comments: [],
-  title: '',
-  body: '',
-  loading: false,
+  post: {
+    title: '',
+    body: '',
+  },
   isFavourite: false,
+  commentsLoading: false,
+  comments: [],
   newCommentContent: '',
 };
 

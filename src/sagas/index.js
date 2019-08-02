@@ -1,13 +1,13 @@
 import { fork, all } from 'redux-saga/effects';
 
 import * as postsSaga from './fetchPosts';
-import * as commentsSaga from './fetchComments';
+import * as userEmailSaga from './fetchEmail';
 
 function* rootSaga() {
   yield all(
     [
       ...Object.values(postsSaga),
-      ...Object.values(commentsSaga),
+      ...Object.values(userEmailSaga),
     ].map(fork),
   );
 }

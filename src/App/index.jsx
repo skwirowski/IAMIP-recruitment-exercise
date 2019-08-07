@@ -7,9 +7,15 @@ import postActions from "../actions/postActions";
 import commentActions from "../actions/commentActions";
 import emailActions from "../actions/emailActions";
 import getComments from "../services/getCommentsAPI";
-import { sliceArrayPiece } from "../utils/helperFunctions";
+import getNames from "../services/getNamesAPI";
+import {
+  sliceArrayPiece,
+  capitalizeFirstLetter,
+  calculatePagesNumber
+} from "../utils/helperFunctions";
 
 import Loader from "../components/Loader";
+import SearchBox from "../components/SearchBox";
 import Post from "../components/Post";
 
 import "./styles/styles.css";
@@ -22,16 +28,17 @@ class App extends PureComponent {
       page: [],
       resultsOffset: 0,
       resultsLimit: 10,
+      pageCount: 10,
       newCommentContent: {},
+      authorsLoaded: false,
+      searchPhrase: "",
+      searchFields: {
+        title: "",
+        body: "",
+        name: ""
+      },
+      searchResultsPosts: []
     };
-
-    // if (window.performance) {
-    //   if (performance.navigation.type == 1) {
-    //     alert("This page is reloaded");
-    //   } else {
-    //     alert("This page is not reloaded");
-    //   }
-    // }
   }
 
   componentDidMount() {
@@ -42,15 +49,64 @@ class App extends PureComponent {
   }
 
   componentDidUpdate() {
-    const { setPostsLoadedFlag } = this.props;
+    const { setPostsLoadedFlag, addNamesToPosts } = this.props;
     const { posts, postsLoaded } = this.props.postReducer;
-    const { resultsOffset, resultsLimit } = this.state;
+    const {
+      resultsOffset,
+      resultsLimit,
+      authorsLoaded,
+      searchPhrase
+    } = this.state;
+    const { title, body, name } = this.state.searchFields;
+
+    // SEARCH filtering -->
+    const defineSearchFilters = (post, query) => {
+      let titleField, bodyField, nameField;
+      if (title) {
+        titleField = post[title].toLowerCase().includes(query.toLowerCase());
+      }
+      if (body) {
+        bodyField = post[body].toLowerCase().includes(query.toLowerCase());
+      }
+      if (name) {
+        nameField = post[name].toLowerCase().includes(query.toLowerCase());
+      }
+      return titleField || bodyField || nameField;
+    };
+    let searchResultsPosts =
+      !title && !body && !name
+        ? posts
+        : posts.filter(post => defineSearchFilters(post, searchPhrase));
+    // <-- SEARCH filtering
 
     if (postsLoaded) {
-      const newPage = sliceArrayPiece(posts, resultsOffset, resultsLimit);
-
-      this.setState({ page: newPage });
+      const newPage = sliceArrayPiece(
+        searchResultsPosts,
+        resultsOffset,
+        resultsLimit
+      );
+      this.setState({
+        page: newPage,
+        pageCount: calculatePagesNumber(searchResultsPosts)
+      });
       setPostsLoadedFlag(false);
+    }
+
+    if (postsLoaded && !authorsLoaded) {
+      this.setState({ authorsLoaded: true });
+
+      getNames()
+        .then(data =>
+          data.map(item => {
+            const firstName = capitalizeFirstLetter(item.name.first);
+            const lastName = capitalizeFirstLetter(item.name.last);
+            return `${firstName} ${lastName}`;
+          })
+        )
+        .then(name => addNamesToPosts(name))
+        .then(() => {
+          setPostsLoadedFlag(true);
+        });
     }
   }
 
@@ -69,22 +125,23 @@ class App extends PureComponent {
     const setCommentLoadingFlag = flag => {
       this.setState({
         ...this.state,
-        page: this.state.page.map(post => (
-          (id === post.id) ? ({
-            ...post,
-            commentsLoading: flag,
-          }) : (
-            post)
-        ))
+        page: this.state.page.map(post =>
+          id === post.id
+            ? {
+                ...post,
+                commentsLoading: flag
+              }
+            : post
+        )
       });
-    }
+    };
 
     setCommentLoadingFlag(true);
 
     getComments(id)
-    .then(data => addCommentsToPost(id, data))
-    .then(() => setPostsLoadedFlag(true))
-    .then(() => setCommentLoadingFlag(false));
+      .then(data => addCommentsToPost(id, data))
+      .then(() => setPostsLoadedFlag(true))
+      .then(() => setCommentLoadingFlag(false));
   };
 
   handleCommentChange = (commentContent, id) => {
@@ -114,21 +171,42 @@ class App extends PureComponent {
     setPostsLoadedFlag(true);
   };
 
-  onToggleFavouritePostClick = (id, payload) => {
+  handleFavouritePostClick = (id, payload) => {
     const { toggleFavouritePost, setPostsLoadedFlag } = this.props;
 
     toggleFavouritePost(id, payload);
     setPostsLoadedFlag(true);
   };
 
+  handleSearchChange = searchPhraseContent => {
+    const { setPostsLoadedFlag } = this.props;
+    this.setState({ searchPhrase: searchPhraseContent });
+    setPostsLoadedFlag(true);
+  };
+
+  handleCheckboxChange = (value, status) => {
+    const checkboxValue = status ? value : "";
+    this.setState({
+      searchFields: {
+        ...this.state.searchFields,
+        [value]: checkboxValue
+      }
+    });
+  };
+
   render() {
     const { postsLoading } = this.props.postReducer;
     const { userEmailLoading } = this.props.emailReducer;
-    const { page, newCommentContent, newComments } = this.state;
-    console.log()
+    const { page, pageCount, newCommentContent, searchPhrase } = this.state;
+
     return (
       <div className="app">
-        {(postsLoading || userEmailLoading) ? (
+        <SearchBox
+          onSearchChange={this.handleSearchChange}
+          searchPhraseContent={searchPhrase}
+          onCheckboxChange={this.handleCheckboxChange}
+        />
+        {postsLoading || userEmailLoading ? (
           <Loader />
         ) : (
           <div>
@@ -141,7 +219,7 @@ class App extends PureComponent {
                 comments={post.comments}
                 onViewCommentsClick={() => this.handleCommentsClick(post.id)}
                 onToggleFavouritePostClick={() =>
-                  this.onToggleFavouritePostClick(post.id, !post.isFavourite)
+                  this.handleFavouritePostClick(post.id, !post.isFavourite)
                 }
                 newCommentContent={
                   newCommentContent.postId === post.id
@@ -152,8 +230,11 @@ class App extends PureComponent {
                   this.handleCommentChange(newCommentContent, post.id)
                 }
                 onCommentSubmit={() => {
-                  if (newCommentContent.postId === post.id && newCommentContent.commentContent) {
-                    this.handleCommentSubmit(post.id)
+                  if (
+                    newCommentContent.postId === post.id &&
+                    newCommentContent.commentContent
+                  ) {
+                    this.handleCommentSubmit(post.id);
                   }
                 }}
               />
@@ -165,7 +246,7 @@ class App extends PureComponent {
           nextLabel={">>"}
           breakLabel={"..."}
           breakClassName={"break-me"}
-          pageCount={10}
+          pageCount={pageCount}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={this.handlePageClick}
@@ -184,9 +265,13 @@ const mapDispatchToProps = dispatch => ({
   fetchPosts: (start, limit) => dispatch(postActions.fetchPosts(start, limit)),
   fetchEmail: () => dispatch(emailActions.fetchEmail()),
   setPostsLoadedFlag: flag => dispatch(postActions.setPostsLoadedFlag(flag)),
-  addCommentsToPost: (id, payload) => dispatch(commentActions.addCommentsToPost(id, payload)),
-  toggleFavouritePost: (id, payload) => dispatch(postActions.toggleFavouritePost(id, payload)),
-  addNewCommentToPost: (id, payload) => dispatch(commentActions.addNewCommentToPost(id, payload)),
+  addNamesToPosts: payload => dispatch(postActions.addNamesToPosts(payload)),
+  toggleFavouritePost: (id, payload) =>
+    dispatch(postActions.toggleFavouritePost(id, payload)),
+  addCommentsToPost: (id, payload) =>
+    dispatch(commentActions.addCommentsToPost(id, payload)),
+  addNewCommentToPost: (id, payload) =>
+    dispatch(commentActions.addNewCommentToPost(id, payload))
 });
 
 App.propTypes = {

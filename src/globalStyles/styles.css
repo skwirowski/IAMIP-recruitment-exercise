@@ -17,3 +17,11 @@ body {
 .global__separator-line--small-margin-top {
   margin-top: 5px;
 }
+.global__primary-container {
+  width: 80%;
+  background-color: #FFFFFF;
+  border: 1px solid #dddfe2;
+  border-radius: 4px;
+  padding: 15px;
+  margin: 15px auto;
+}

@@ -1,18 +1,20 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,700,900&display=swap');
-.post-container {
-  width: 80%;
-  background-color: #FFFFFF;
-  border: 1px solid #dddfe2;
-  border-radius: 4px;
-  padding: 15px;
-  margin: 15px auto;
-}
 .post-container__title {
   font-family: 'Montserrat', sans-serif;
   font-weight: 700;
   font-size: 24px;
   color: #3c3c3c;
+}
+.post-container__name {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+}
+.post-container__name span {
+  font-weight: 700;
+  color: #385898;
+  margin-left: 15px;
 }
 .post-container__body {
   font-family: 'Roboto', sans-serif;

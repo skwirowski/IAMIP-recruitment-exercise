@@ -11,6 +11,11 @@ const setPostsLoadedFlag = flag => ({
   flag,
 });
 
+const addNamesToPosts = payload => ({
+  type: types.ADD_NAMES_TO_POSTS,
+  payload,
+});
+
 const toggleFavouritePost = (id, payload) => ({
   type: types.TOGGLE_FAVOURITE_POST,
   id,
@@ -20,5 +25,6 @@ const toggleFavouritePost = (id, payload) => ({
 export default {
   fetchPosts,
   setPostsLoadedFlag,
+  addNamesToPosts,
   toggleFavouritePost,
 };

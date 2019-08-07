@@ -33,8 +33,12 @@ const Post = ({
   const handleToggleFavouritePostClick = id => onToggleFavouritePostClick(id);
 
   return (
-    <div className="post-container">
+    <div className="post-container global__primary-container">
       <h2 className="post-container__title">{post.title}</h2>
+      <h3 className="post-container__name">
+        Author:
+        <span>{post.name}</span>
+      </h3>
       <p className="post-container__body">{post.body}</p>
       <span
         className={[
@@ -118,6 +122,7 @@ Post.propTypes = {
   post: PropTypes.shape({
     title: PropTypes.string,
     body: PropTypes.string,
+    name: PropTypes.string,
   }),
   isFavourite: PropTypes.bool,
   commentsLoading: PropTypes.bool,
@@ -141,6 +146,7 @@ Post.defaultProps = {
   post: {
     title: '',
     body: '',
+    name: '',
   },
   isFavourite: false,
   commentsLoading: false,

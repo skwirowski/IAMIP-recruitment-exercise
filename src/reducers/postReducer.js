@@ -14,12 +14,14 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...state,
         postsLoading: true,
         postsLoaded: false,
+        loadAuthors: false,
       };
     case types.POSTS_FETCH_SUCCEEDED:
       return {
         ...state,
         postsLoading: false,
         postsLoaded: true,
+        loadAuthors: true,
         posts: action.payload,
       };
     case types.POSTS_FETCH_FAILED:
@@ -27,12 +29,20 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...state,
         postsLoading: false,
         postsLoaded: false,
+        loadAuthors: false,
         error: action.payload,
       };
     case types.SET_POSTS_LOADED_FLAG:
       return {
         ...state,
         postsLoaded: action.flag,
+      };
+    case types.ADD_NAMES_TO_POSTS:
+      return {
+        ...state,
+        posts: state.posts.map((post, index) => (
+          { ...post, name: action.payload[index] }
+        )),
       };
     case types.TOGGLE_FAVOURITE_POST:
       return {

@@ -1,0 +1,57 @@
+@import '../../../globalStyles/settings';
+
+.searchbox-container {
+  font-family: @primaryFontFamily;
+
+  &__search-input {
+    box-sizing: border-box;
+    width: 100%;
+    height: 44px;
+    font-size: @defaultFontSize;
+    text-indent: 37px;
+    background-color: #FFFFFF;
+    background-image: url("../../../utils/images/search.png");
+    background-position: 10px center;
+    background-size: 32px;
+    background-repeat: no-repeat;
+    border: 1px solid @accentColor08;
+    border-radius: 22px;
+    padding: 8px 12px;
+
+    &:focus {
+      outline: none;
+
+      &::placeholder {
+        color: @accentColor09;
+      }
+    }
+  }
+
+  .search-checkbox-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 15px;
+
+    &__label {
+      width: min-content;
+      white-space: nowrap;
+      color: @secondaryColor;
+      margin-bottom: 15px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      input {
+        margin-right: 10px;
+      }
+
+      span {
+        font-weight: @primaryFontWeightBold;
+        text-transform: uppercase;
+        color: @accentColor04;
+        margin: 0 10px 0 10px;
+      }
+    }
+  }
+}

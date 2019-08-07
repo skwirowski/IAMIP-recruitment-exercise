@@ -1,18 +1,23 @@
 @import '../../../globalStyles/settings';
 
 .post-container {
-  width: 80%;
-  background-color: #FFFFFF;
-  border: 1px solid @accentColor01;
-  border-radius: 4px;
-  padding: 15px;
-  margin: 15px auto;
-
   &__title {
     font-family: @secondaryFontFamily;
     font-weight: @secondaryFontWeightBold;
     font-size: @header2FontSize;
     color: @secondaryColor;
+  }
+
+  &__name {
+    font-family: @primaryFontFamily;
+    font-weight: @primaryFontWeightRegular;
+    font-size: @header3FontSize;
+
+    span {
+      font-weight: @primaryFontWeightBold;
+      color: @accentColor05;
+      margin-left: 15px;
+    }
   }
 
   &__body {

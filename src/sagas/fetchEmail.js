@@ -19,7 +19,7 @@ function* fetchEmail() {
 }
 
 function* fetchEmailActionWatcher() {
-  yield takeLatest(types.USER_EMAIL_FETCH_REQUESTED, fetchEmail);
+  yield takeLatest(types.POSTS_FETCH_SUCCEEDED, fetchEmail);
 }
 
 export default fetchEmailActionWatcher;

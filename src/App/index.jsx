@@ -16,6 +16,8 @@ import {
 
 import Loader from "../components/Loader";
 import SearchBox from "../components/SearchBox";
+import FavouriteFilterBox from "../components/FavouriteFilterBox";
+import SortBox from "../components/SortBox";
 import Post from "../components/Post";
 
 import "./styles/styles.css";
@@ -37,7 +39,7 @@ class App extends PureComponent {
         body: "",
         name: ""
       },
-      searchResultsPosts: []
+      displayOnlyFavourites: false,
     };
   }
 
@@ -55,7 +57,8 @@ class App extends PureComponent {
       resultsOffset,
       resultsLimit,
       authorsLoaded,
-      searchPhrase
+      searchPhrase,
+      displayOnlyFavourites,
     } = this.state;
     const { title, body, name } = this.state.searchFields;
 
@@ -79,15 +82,22 @@ class App extends PureComponent {
         : posts.filter(post => defineSearchFilters(post, searchPhrase));
     // <-- SEARCH filtering
 
+    // ONLY FAVOURITES filtering -->
+    let favouritePostsFilter =
+      displayOnlyFavourites
+        ? searchResultsPosts.filter(post => post.isFavourite)
+        : searchResultsPosts;
+    // <-- ONLY FAVOURITES filtering
+
     if (postsLoaded) {
       const newPage = sliceArrayPiece(
-        searchResultsPosts,
+        favouritePostsFilter,
         resultsOffset,
         resultsLimit
       );
       this.setState({
         page: newPage,
-        pageCount: calculatePagesNumber(searchResultsPosts)
+        pageCount: calculatePagesNumber(favouritePostsFilter)
       });
       setPostsLoadedFlag(false);
     }
@@ -194,10 +204,17 @@ class App extends PureComponent {
     });
   };
 
+  handleDisplayFavouritesClick = () => {
+    const { setPostsLoadedFlag } = this.props;
+    const { displayOnlyFavourites } = this.state;
+    this.setState({ displayOnlyFavourites: !displayOnlyFavourites });
+    setPostsLoadedFlag(true);
+  }
+
   render() {
     const { postsLoading } = this.props.postReducer;
     const { userEmailLoading } = this.props.emailReducer;
-    const { page, pageCount, newCommentContent, searchPhrase } = this.state;
+    const { page, pageCount, newCommentContent, searchPhrase, displayOnlyFavourites } = this.state;
 
     return (
       <div className="app">
@@ -206,6 +223,11 @@ class App extends PureComponent {
           searchPhraseContent={searchPhrase}
           onCheckboxChange={this.handleCheckboxChange}
         />
+        <FavouriteFilterBox
+          onDisplayFavouritesClick={this.handleDisplayFavouritesClick}
+          displayOnlyFavourites={displayOnlyFavourites}
+        />
+        <SortBox />
         {postsLoading || userEmailLoading ? (
           <Loader />
         ) : (

@@ -1,0 +1,89 @@
+@import '../../../globalStyles/settings';
+
+.favourite-filter-box-container {
+
+  &__button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 44px;
+    font-weight: @primaryFontWeightRegular;
+    font-size: @defaultFontSize;
+    color: @accentColor10;
+    line-height: 32px;
+    background-color: @accentColor11;
+    border-radius: 22px;
+    border: 1px solid @accentColor08;
+    transition: background-color 500ms ease;
+    cursor: pointer;
+    padding: 0 12px 0 12px;
+
+    &:hover {
+      background-color: @accentColor12;
+    }
+
+    &:active {
+      background-color: darken(@accentColor12, 5%);
+    }
+
+    &--heart {
+      position: relative;
+      width: 20px;
+      height: 18px;
+
+      &::before,
+      &::after {
+        position: absolute;
+        content: "";
+        left: 10px;
+        top: 2px;
+        width: 10px;
+        height: 16px;
+        background: @accentColor06;
+        -moz-border-radius: 16px 16px 0 0;
+        border-radius: 16px 16px 0 0;
+        -webkit-transform: rotate(-45deg);
+        -moz-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+        -o-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+        -webkit-transform-origin: 0 100%;
+        -moz-transform-origin: 0 100%;
+        -ms-transform-origin: 0 100%;
+        -o-transform-origin: 0 100%;
+        transform-origin: 0 100%;
+      }
+
+      &::after {
+        left: 0;
+        -webkit-transform: rotate(45deg);
+        -moz-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        -o-transform: rotate(45deg);
+        transform: rotate(45deg);
+        -webkit-transform-origin: 100% 100%;
+        -moz-transform-origin: 100% 100%;
+        -ms-transform-origin: 100% 100%;
+        -o-transform-origin: 100% 100%;
+        transform-origin: 100% 100%;
+      }
+
+      &-add {
+
+        &::before,
+        &::after {
+          background: @accentColor07;
+        }
+      }
+    }
+
+    &--content {
+      color: @secondaryColor;
+      margin-left: 15px / 2;
+
+      &-remove {
+        color: fade(@secondaryColor, 70%);
+      }
+    }
+  }
+}

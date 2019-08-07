@@ -38,7 +38,6 @@ const FavouriteButton = ({ favourite, onClick }) => (
           </span>
         </Fragment>
       )}
-
     </div>
   </button>
 );

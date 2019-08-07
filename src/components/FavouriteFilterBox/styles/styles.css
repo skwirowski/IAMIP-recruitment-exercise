@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700,900&display=swap');
+.favourite-filter-box-container__button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 44px;
+  font-weight: 400;
+  font-size: 16px;
+  color: #4b4f56;
+  line-height: 32px;
+  background-color: #f5f6f7;
+  border-radius: 22px;
+  border: 1px solid #ccd0d5;
+  transition: background-color 500ms ease;
+  cursor: pointer;
+  padding: 0 12px 0 12px;
+}
+.favourite-filter-box-container__button:hover {
+  background-color: #ebedf0;
+}
+.favourite-filter-box-container__button:active {
+  background-color: #dce0e5;
+}
+.favourite-filter-box-container__button--heart {
+  position: relative;
+  width: 20px;
+  height: 18px;
+}
+.favourite-filter-box-container__button--heart::before,
+.favourite-filter-box-container__button--heart::after {
+  position: absolute;
+  content: "";
+  left: 10px;
+  top: 2px;
+  width: 10px;
+  height: 16px;
+  background: #fc2e5a;
+  -moz-border-radius: 16px 16px 0 0;
+  border-radius: 16px 16px 0 0;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  -webkit-transform-origin: 0 100%;
+  -moz-transform-origin: 0 100%;
+  -ms-transform-origin: 0 100%;
+  -o-transform-origin: 0 100%;
+  transform-origin: 0 100%;
+}
+.favourite-filter-box-container__button--heart::after {
+  left: 0;
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+  -webkit-transform-origin: 100% 100%;
+  -moz-transform-origin: 100% 100%;
+  -ms-transform-origin: 100% 100%;
+  -o-transform-origin: 100% 100%;
+  transform-origin: 100% 100%;
+}
+.favourite-filter-box-container__button--heart-add::before,
+.favourite-filter-box-container__button--heart-add::after {
+  background: #8d949e;
+}
+.favourite-filter-box-container__button--content {
+  color: #3c3c3c;
+  margin-left: 7.5px;
+}
+.favourite-filter-box-container__button--content-remove {
+  color: rgba(60, 60, 60, 0.7);
+}

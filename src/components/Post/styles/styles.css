@@ -6,14 +6,29 @@
   font-size: 24px;
   color: #3c3c3c;
 }
-.post-container__name {
+.post-container__wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.post-container__wrapper--name {
   font-family: 'Roboto', sans-serif;
   font-weight: 400;
   font-size: 20px;
 }
-.post-container__name span {
+.post-container__wrapper--name span {
   font-weight: 700;
   color: #385898;
+  margin-left: 15px;
+}
+.post-container__wrapper--post-id {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+}
+.post-container__wrapper--post-id span {
+  font-weight: 700;
+  color: #4b4f56;
   margin-left: 15px;
 }
 .post-container__body {

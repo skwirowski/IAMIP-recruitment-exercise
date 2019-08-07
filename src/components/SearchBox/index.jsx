@@ -16,7 +16,12 @@ const SearchBox = ({ onSearchChange, searchPhraseContent, onCheckboxChange }) =>
   };
 
   return (
-    <div className="searchbox-container global__primary-container">
+    <div
+      className={[
+        'searchbox-container',
+        'global__primary-container',
+      ].join(' ')}
+    >
       <input
         className="searchbox-container__search-input"
         type="text"

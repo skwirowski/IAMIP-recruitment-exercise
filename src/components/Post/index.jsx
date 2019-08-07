@@ -35,10 +35,16 @@ const Post = ({
   return (
     <div className="post-container global__primary-container">
       <h2 className="post-container__title">{post.title}</h2>
-      <h3 className="post-container__name">
-        Author:
-        <span>{post.name}</span>
-      </h3>
+      <div className="post-container__wrapper">
+        <h3 className="post-container__wrapper--name">
+          Author:
+          <span>{post.name}</span>
+        </h3>
+        <h4 className="post-container__wrapper--post-id">
+          Post id:
+          <span>{post.id}</span>
+        </h4>
+      </div>
       <p className="post-container__body">{post.body}</p>
       <span
         className={[
@@ -123,6 +129,7 @@ Post.propTypes = {
     title: PropTypes.string,
     body: PropTypes.string,
     name: PropTypes.string,
+    id: PropTypes.number,
   }),
   isFavourite: PropTypes.bool,
   commentsLoading: PropTypes.bool,
@@ -147,6 +154,7 @@ Post.defaultProps = {
     title: '',
     body: '',
     name: '',
+    id: null,
   },
   isFavourite: false,
   commentsLoading: false,

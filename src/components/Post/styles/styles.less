@@ -8,15 +8,33 @@
     color: @secondaryColor;
   }
 
-  &__name {
-    font-family: @primaryFontFamily;
-    font-weight: @primaryFontWeightRegular;
-    font-size: @header3FontSize;
+  &__wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-    span {
-      font-weight: @primaryFontWeightBold;
-      color: @accentColor05;
-      margin-left: 15px;
+    &--name {
+      font-family: @primaryFontFamily;
+      font-weight: @primaryFontWeightRegular;
+      font-size: @header3FontSize;
+
+      span {
+        font-weight: @primaryFontWeightBold;
+        color: @accentColor05;
+        margin-left: 15px;
+      }
+    }
+
+    &--post-id {
+      font-family: @primaryFontFamily;
+      font-weight: @primaryFontWeightRegular;
+      font-size: @header4FontSize;
+
+      span {
+        font-weight: @primaryFontWeightBold;
+        color: @accentColor10;
+        margin-left: 15px;
+      }
     }
   }
 
@@ -77,7 +95,7 @@
     justify-content: space-between;
     align-items: center;
     height: 32px;
-    font-weight: 700;
+    font-weight: @primaryFontWeightBold;
     color: @accentColor10;
     line-height: 32px;
     background-color: @accentColor11;

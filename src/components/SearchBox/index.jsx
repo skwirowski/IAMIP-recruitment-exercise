@@ -7,13 +7,13 @@ const SearchBox = ({ onSearchChange, searchPhraseContent, onCheckboxChange }) =>
     onSearchChange(event.target.value);
   };
 
-  const searchFields = ['title', 'body', 'name'];
-
   const handleCheckboxChange = (event) => {
     const chceckboxValue = event.target.value;
     const checkboxStatus = event.target.checked;
     onCheckboxChange(chceckboxValue, checkboxStatus);
   };
+
+  const searchFields = ['title', 'body', 'name'];
 
   return (
     <div

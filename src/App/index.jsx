@@ -11,7 +11,11 @@ import getNames from "../services/getNamesAPI";
 import {
   sliceArrayPiece,
   capitalizeFirstLetter,
-  calculatePagesNumber
+  calculatePagesNumber,
+  sortNumbersInAscendingOrder,
+  sortNumbersInDescendingOrder,
+  sortStringsInAscendingOrder,
+  sortStringsInDescendingOrder,
 } from "../utils/helperFunctions";
 
 import Loader from "../components/Loader";
@@ -40,6 +44,7 @@ class App extends PureComponent {
         name: ""
       },
       displayOnlyFavourites: false,
+      sortingOrder: "",
     };
   }
 
@@ -59,6 +64,7 @@ class App extends PureComponent {
       authorsLoaded,
       searchPhrase,
       displayOnlyFavourites,
+      sortingOrder,
     } = this.state;
     const { title, body, name } = this.state.searchFields;
 
@@ -89,9 +95,33 @@ class App extends PureComponent {
         : searchResultsPosts;
     // <-- ONLY FAVOURITES filtering
 
+    // SORTING options -->
+    const defineSortOption = (posts, sortOption) => {
+      let sortedPosts = [];
+      switch(sortOption) {
+        case 'alphabetical-order':
+          sortedPosts = sortStringsInAscendingOrder(posts, 'title');
+          break;
+        case 'reverse-alphabetical-order':
+          sortedPosts = sortStringsInDescendingOrder(posts, 'title');
+          break;
+        case 'ascending-order':
+          sortedPosts = sortNumbersInAscendingOrder(posts, 'id');
+          break;
+        case 'descending-order':
+          sortedPosts = sortNumbersInDescendingOrder(posts, 'id');
+          break;
+        default:
+          sortedPosts = posts;
+      }
+      return sortedPosts;
+    };
+    let sortedPosts = defineSortOption(favouritePostsFilter, sortingOrder);
+    // <-- SORTING options
+
     if (postsLoaded) {
       const newPage = sliceArrayPiece(
-        favouritePostsFilter,
+        sortedPosts,
         resultsOffset,
         resultsLimit
       );
@@ -194,7 +224,7 @@ class App extends PureComponent {
     setPostsLoadedFlag(true);
   };
 
-  handleCheckboxChange = (value, status) => {
+  handleSearchCheckboxChange = (value, status) => {
     const checkboxValue = status ? value : "";
     this.setState({
       searchFields: {
@@ -209,6 +239,15 @@ class App extends PureComponent {
     const { displayOnlyFavourites } = this.state;
     this.setState({ displayOnlyFavourites: !displayOnlyFavourites });
     setPostsLoadedFlag(true);
+  };
+
+  handleSortRadioInputChange = (value, status) => {
+    const { setPostsLoadedFlag } = this.props;
+    const radioInputValue = status ? value : "";
+    this.setState({
+      sortingOrder: radioInputValue,
+    });
+    setPostsLoadedFlag(true);
   }
 
   render() {
@@ -221,13 +260,16 @@ class App extends PureComponent {
         <SearchBox
           onSearchChange={this.handleSearchChange}
           searchPhraseContent={searchPhrase}
-          onCheckboxChange={this.handleCheckboxChange}
+          onCheckboxChange={this.handleSearchCheckboxChange}
         />
         <FavouriteFilterBox
           onDisplayFavouritesClick={this.handleDisplayFavouritesClick}
           displayOnlyFavourites={displayOnlyFavourites}
         />
-        <SortBox />
+        <SortBox
+          onRadioChange={this.handleSortRadioInputChange}
+          onSortPostsSubmit={() => {}}
+        />
         {postsLoading || userEmailLoading ? (
           <Loader />
         ) : (

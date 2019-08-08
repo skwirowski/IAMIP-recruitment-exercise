@@ -113,7 +113,7 @@ const Post = ({
                   src={sendIcon}
                   alt="Send button icon"
                 />
-                  Send
+                Send
               </button>
             </form>
           )}

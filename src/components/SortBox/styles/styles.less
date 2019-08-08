@@ -1,2 +1,67 @@
 @import '../../../globalStyles/settings';
 
+.sortbox-container {
+  font-family: @primaryFontFamily;
+  font-size: @defaultFontSize;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  &__label {
+    position: relative;
+    line-height: 32px;
+    margin-bottom: 15px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &--input {
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    &--checkmark {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 20px;
+      width: 20px;
+      background-color: @accentColor11;
+      border-radius: 4px;
+      border: 1px solid @accentColor08;
+      padding: 5px;
+
+      &-image {
+        width: 100%;
+      }
+
+      &:hover {
+        background-color: @accentColor12;
+      }
+
+      &:active {
+        background-color: darken(@accentColor12, 5%);
+      }
+    }
+
+    input:checked~.sortbox-container__label--checkmark {
+      background-color: darken(@accentColor12, 15%);
+      border-color: darken(@accentColor08, 15%);
+    }
+
+    &--description {
+      margin-left: 20px;
+
+      span {
+        text-transform: uppercase;
+        font-weight: @primaryFontWeightBold;
+        color: @accentColor05;
+      }
+    }
+  }
+}
